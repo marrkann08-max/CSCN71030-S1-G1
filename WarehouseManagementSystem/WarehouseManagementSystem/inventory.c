@@ -151,16 +151,47 @@ int inventory_update_quantity(
     return 0;
 }
 
-/* Temporary TDD stub: implemented during INV-F-004. */
 int inventory_delete_product(
     Product** head,
     unsigned int id
 )
 {
-    (void)head;
-    (void)id;
+    Product* current;
+    Product* previous;
 
-    return -1;
+    if (util_check_null(head) != 0 ||
+        id == 0U ||
+        *head == NULL)
+    {
+        return -1;
+    }
+
+    current = *head;
+    previous = NULL;
+
+    while (current != NULL && current->id != id)
+    {
+        previous = current;
+        current = current->next;
+    }
+
+    if (current == NULL)
+    {
+        return -1;
+    }
+
+    if (previous == NULL)
+    {
+        *head = current->next;
+    }
+    else
+    {
+        previous->next = current->next;
+    }
+
+    free(current);
+
+    return 0;
 }
 
 /* Temporary TDD stub: implemented during INV-F-005. */
