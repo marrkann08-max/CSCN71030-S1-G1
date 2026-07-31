@@ -194,8 +194,24 @@ int inventory_delete_product(
     return 0;
 }
 
-/* Temporary TDD stub: implemented during INV-F-005. */
 void inventory_free_all(Product** head)
 {
-    (void)head;
+    Product* current;
+    Product* next_product;
+
+    if (head == NULL)
+    {
+        return;
+    }
+
+    current = *head;
+
+    while (current != NULL)
+    {
+        next_product = current->next;
+        free(current);
+        current = next_product;
+    }
+
+    *head = NULL;
 }
