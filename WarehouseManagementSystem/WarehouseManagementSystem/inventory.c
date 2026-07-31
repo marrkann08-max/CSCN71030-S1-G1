@@ -41,7 +41,14 @@ int inventory_add_product(
 
     if (util_check_null(head) != 0 ||
         util_check_null(name) != 0 ||
-        util_check_null(location) != 0)
+        util_check_null(location) != 0 ||
+        id == 0U ||
+        quantity < 0)
+    {
+        return -1;
+    }
+
+    if (inventory_get_product(*head, id) != NULL)
     {
         return -1;
     }
