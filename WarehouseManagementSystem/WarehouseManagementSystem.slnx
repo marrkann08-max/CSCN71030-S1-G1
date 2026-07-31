@@ -3,6 +3,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="InventoryTests/InventoryTests.vcxproj" />
   <Project Path="Utilitiestests/Utilitiestests.vcxproj" />
   <Project Path="WarehouseManagementSystem/WarehouseManagementSystem.vcxproj" />
 </Solution>
