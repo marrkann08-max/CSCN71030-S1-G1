@@ -124,18 +124,31 @@ int inventory_add_product(
     return 0;
 }
 
-/* Temporary TDD stub: implemented during INV-F-003. */
 int inventory_update_quantity(
     Product* head,
     unsigned int id,
     int new_quantity
 )
 {
-    (void)head;
-    (void)id;
-    (void)new_quantity;
+    Product* product;
 
-    return -1;
+    if (util_check_null(head) != 0 ||
+        id == 0U ||
+        new_quantity < 0)
+    {
+        return -1;
+    }
+
+    product = inventory_get_product(head, id);
+
+    if (product == NULL)
+    {
+        return -1;
+    }
+
+    product->quantity = new_quantity;
+
+    return 0;
 }
 
 /* Temporary TDD stub: implemented during INV-F-004. */
