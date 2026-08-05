@@ -4,8 +4,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "Dummy.h"
+#include <time.h>
 
+// dummy function need for the program to operate independently
+
+char* getUser() {
+	return "SYS_ADM: ";
+}
+
+char* getItemName() {
+	return "Stuff";
+}
+
+//  dummy stuff ends here
 
 
 FILE* logFile;
