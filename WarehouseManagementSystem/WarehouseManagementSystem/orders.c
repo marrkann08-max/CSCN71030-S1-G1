@@ -15,7 +15,33 @@ Order* order_create(unsigned int productID, int quantity, char orderType) {
     return order;
     }
 int order_process(Product* head, Order* order) {
-    return -1;
+    int result;
+    if (head == NULL || order == NULL) {
+        return ORDER_FAILURE;
+    }
+    order->status = ORDER_IN_PROCESS;
+    if (order->quantity <= 0 ||
+        (order->orderType != ORDER_RECEIVE && order->orderType != ORDER_DISPATCH)) {
+        order->status = ORDER_REJECTED;
+        return ORDER_FAILURE;
+    }
+    if (order->orderType == ORDER_RECEIVE) {
+        result = processReceive(head, order->productID, order->quantity);
+    }
+    else if (order->orderType == ORDER_DISPATCH) {
+        result = processDispatch(head, order->productID, order->quantity);
+    }
+    else {
+        order->status = ORDER_REJECTED;
+        return ORDER_FAILURE;
+    }
+    if (result == ORDER_SUCCESS) {
+        order->status = ORDER_COMPLETED;
+        return ORDER_SUCCESS;
+    }
+    order->status = ORDER_REJECTED;
+    return ORDER_FAILURE;
+
 }
 int processReceive(Product* head, unsigned int productID, int quantity) {
     Product* current = head;
@@ -32,7 +58,18 @@ int processReceive(Product* head, unsigned int productID, int quantity) {
     return ORDER_FAILURE;
 }
 int processDispatch(Product* head, unsigned int productID, int quantity) {
-    return 0;
+    Product* current = head;
+    if (head == NULL || quantity <= 0) {
+        return ORDER_FAILURE;
+    }
+    while (current != NULL) {
+        if (current->id == productID) {
+            current->quantity -= quantity;
+            return ORDER_SUCCESS;
+        }
+        current = current->next;
+    }
+    return ORDER_FAILURE;
 }
 void order_free(Order* order) {
     if (order != NULL)
