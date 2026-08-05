@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <time.h>
 
 // dummy function need for the program to operate independently
 
@@ -20,8 +19,7 @@ char* getItemName() {
 
 
 FILE* logFile;
-char textBuffer[256];
-char* user;
+char textBuffer[128];
 
 /*
 Author; Alex
@@ -42,9 +40,12 @@ int writeToFile(char* text) {
 	strcat(textBuffer, text);
 	//add \n
 	strcat(textBuffer, "\n");
-	// write buffer to file
-	fprintf(logFile, textBuffer);
-	return 1;
+	// write buffer to file.Will return negative if it failed
+	if (fprintf(logFile, textBuffer) < 0) {
+		printf("ERROR: Logger failed to write to file.");
+		return -1;
+	};
+	return 0;
 }
 
 
@@ -78,13 +79,14 @@ void logCleanUp() {
 	writeToFile("Program closing...");
 	// close the file
 	fclose(logFile);
-	// overwrite then clear the buffer to leave no leftover information in memory
+	// Clear the buffer to leave no leftover information in memory
+	memset(textBuffer, 0, sizeof(textBuffer));
 }
 
 /*
 Author; Alex
 Input: Transaction information
-Output: 1 when the transaction is recorded successfully or -1 when formatting or writing fails.
+Output: 0 when the transaction is recorded successfully or -1 when formatting or writing fails.
 purpose: Format and record a successful or rejected warehouse transaction.
 */
 int logTransaction(int id, int amount, int IO, int approved) {
@@ -111,7 +113,10 @@ int logTransaction(int id, int amount, int IO, int approved) {
 	else {
 		strcat(transactionBuffer, "; Cancelled;");
 	}
-	// Pass string to write function
-	writeToFile(transactionBuffer);
+	// Pass string to write function. Also check if it failed to write
+	if (writeToFile(transactionBuffer) > 0) {
+		printf("ERROR: logger failed to log transaction");
+		return -1;
+	}
 	return 1;
 }
