@@ -13,7 +13,7 @@ Order* order_create(unsigned int productID, int quantity, char orderType) {
     order->orderType = orderType;
     order->status = ORDER_NOT_STARTED;
     return order;
-    }
+}
 int order_process(Product* head, Order* order) {
     int result;
     if (head == NULL || order == NULL) {
@@ -86,10 +86,13 @@ void order_free(Order* order) {
 }
 int order_simulate(Product* head, unsigned int seed) {
     if (head == NULL) {
-    return -1;
-}
+        return -1;
+    }
     srand(seed);
-        int quantity = (rand() % 10) + 1;
-        char type = (rand() % 2 == 0) ? ORDER_RECEIVE : ORDER_DISPATCH;
+    int quantity = (rand() % 10) + 1;
+    char type = (rand() % 2 == 0) ? ORDER_RECEIVE : ORDER_DISPATCH;
     return (type == ORDER_RECEIVE)? processReceive(head, head->id, quantity): processDispatch(head, head->id, quantity);
+}
+int main(void) {
+
 }

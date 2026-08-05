@@ -25,7 +25,7 @@ typedef struct Product
     struct Product* next;
 } Product;
 
-Order* order_create(unsigned int productID, int quantity, char ordertype);
+Order* order_create(unsigned int productID, int quantity, char orderType);
 int order_process(Product* head, Order * order);
 int processReceive(Product* head, unsigned int productID, int quantity);
 int processDispatch(Product* head, unsigned int productID, int quantity);
