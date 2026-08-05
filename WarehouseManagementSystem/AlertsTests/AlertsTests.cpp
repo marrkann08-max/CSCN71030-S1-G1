@@ -95,5 +95,60 @@ namespace AlertsTests
 
             std::remove(report_path);
         }
+
+        TEST_METHOD(ALR_F_003_OverwriteAndEmptyInventory)
+        {
+            const char* report_path = "alerts_overwrite.txt";
+            const char* empty_report_path = "alerts_empty_inventory.txt";
+            Product third = { 1003U, "Drill Press", 25, "C-03", nullptr };
+            Product second = { 1002U, "Safety Gloves", 10, "B-02", &third };
+            Product first = { 1001U, "Hammer", 5, "A-01", &second };
+
+            Assert::AreEqual(
+                2,
+                check_low_stock(&first, 11, report_path)
+            );
+            Assert::IsTrue(
+                read_file(report_path).find("Safety Gloves") !=
+                std::string::npos
+            );
+
+            Assert::AreEqual(
+                1,
+                check_low_stock(&first, 6, report_path)
+            );
+
+            const std::string overwritten_report = read_file(report_path);
+            Assert::IsTrue(
+                overwritten_report.find("Threshold: 6") != std::string::npos
+            );
+            Assert::IsTrue(
+                overwritten_report.find("Hammer") != std::string::npos
+            );
+            Assert::IsTrue(
+                overwritten_report.find("Safety Gloves") == std::string::npos
+            );
+            Assert::IsTrue(
+                overwritten_report.find("Drill Press") == std::string::npos
+            );
+
+            Assert::AreEqual(
+                0,
+                check_low_stock(nullptr, 10, empty_report_path)
+            );
+
+            const std::string empty_report = read_file(empty_report_path);
+            Assert::IsTrue(
+                empty_report.find(
+                    "No products are below the configured threshold."
+                ) != std::string::npos
+            );
+            Assert::IsTrue(
+                empty_report.find("Product ID:") == std::string::npos
+            );
+
+            std::remove(report_path);
+            std::remove(empty_report_path);
+        }
     };
 }

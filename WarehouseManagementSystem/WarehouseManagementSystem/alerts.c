@@ -1,6 +1,7 @@
 #include "alerts.h"
 
 #include <ctype.h>
+#include <limits.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -63,6 +64,25 @@ static int copy_alert_path(
     return 0;
 }
 
+static int write_low_stock_record(
+    FILE* stream,
+    const Product* product
+)
+{
+    if (stream == NULL || product == NULL)
+    {
+        return -1;
+    }
+
+    return fprintf(
+        stream,
+        "Product ID: %u | Name: %s | Quantity: %d\n",
+        product->id,
+        product->name,
+        product->quantity
+    ) < 0 ? -1 : 0;
+}
+
 int check_low_stock(
     const Product* head,
     int threshold,
@@ -102,13 +122,9 @@ int check_low_stock(
     {
         if (current->quantity < threshold)
         {
-            if (fprintf(
-                    file,
-                    "Product ID: %u | Name: %s | Quantity: %d\n",
-                    current->id,
-                    current->name,
-                    current->quantity
-                ) < 0)
+            if (flagged_count == INT_MAX ||
+                write_low_stock_record(file, current) != 0 ||
+                write_low_stock_record(stdout, current) != 0)
             {
                 fclose(file);
                 return -1;
@@ -124,6 +140,16 @@ int check_low_stock(
         fputs(
             "No products are below the configured threshold.\n",
             file
+        ) == EOF)
+    {
+        fclose(file);
+        return -1;
+    }
+
+    if (flagged_count == 0 &&
+        fputs(
+            "No products are below the configured threshold.\n",
+            stdout
         ) == EOF)
     {
         fclose(file);
