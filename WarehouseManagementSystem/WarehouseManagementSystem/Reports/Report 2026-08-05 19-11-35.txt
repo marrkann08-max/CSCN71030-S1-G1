@@ -1,0 +1,4 @@
+ID: 1001	Name: Hammer	Amount: 5	Location: A-01
+ID: 2002	Name: Nail	Amount: 10	Location: B-02
+ID: 3003	Name: Screw	Amount: 15	Location: C-03
+ID: 4004	Name: STUFF	Amount: 20	Location: D-04

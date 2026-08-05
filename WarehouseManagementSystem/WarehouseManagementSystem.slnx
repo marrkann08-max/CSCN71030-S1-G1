@@ -5,5 +5,5 @@
   </Configurations>
   <Project Path="InventoryTests/InventoryTests.vcxproj" />
   <Project Path="Utilitiestests/Utilitiestests.vcxproj" />
-  <Project Path="WarehouseManagementSystem/WarehouseManagementSystem.vcxproj" />
+  <Project Path="WarehouseManagementSystem/WarehouseManagementSystem.vcxproj" Id="9654c48c-644e-4b49-b45d-c96f2cee5cd7" />
 </Solution>
