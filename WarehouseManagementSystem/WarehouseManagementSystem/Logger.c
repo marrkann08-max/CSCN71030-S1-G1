@@ -7,19 +7,19 @@
 
 // dummy function need for the program to operate independently
 
-char* getUser() {
+char* getUser() { // Used on line 38
 	return "SYS_ADM: ";
 }
 
-char* getItemName() {
+char* getItemName(int id) { // Used on line 98
 	return "Stuff";
 }
 
 //  dummy stuff ends here
 
-
+#define BUFFERSIZE 128
 FILE* logFile;
-char textBuffer[128];
+char textBuffer[BUFFERSIZE];
 
 /*
 Author; Alex
@@ -28,6 +28,11 @@ Output: 0 if it fails. 1 if it succeeds
 purpose: Write a string to the file
 */
 int writeToFile(char* text) {
+	// Check for buffer overflow
+	if (strlen(text) >= BUFFERSIZE) {
+		printf("ERROR: logger buffer overflow");
+		return -1;
+	}
 	// get raw unix time
 	time_t raw_time = time(NULL);
 	// turn raw time into a structure of different values
@@ -40,11 +45,16 @@ int writeToFile(char* text) {
 	strcat(textBuffer, text);
 	//add \n
 	strcat(textBuffer, "\n");
+	//check if the file pointer is null
+	if (logFile == NULL) {
+		printf("ERROR: Logger failed to find open file");
+		return -1;
+	}
 	// write buffer to file.Will return negative if it failed
 	if (fprintf(logFile, textBuffer) < 0) {
 		printf("ERROR: Logger failed to write to file.");
 		return -1;
-	};
+	}
 	return 0;
 }
 
@@ -86,11 +96,11 @@ void logCleanUp() {
 /*
 Author; Alex
 Input: Transaction information
-Output: 0 when the transaction is recorded successfully or -1 when formatting or writing fails.
+Output: 0 when the transaction is recorded successfully or -1 when writing fails.
 purpose: Format and record a successful or rejected warehouse transaction.
 */
 int logTransaction(int id, int amount, int IO, int approved) {
-	char transactionBuffer[128] = { '0' };
+	char transactionBuffer[BUFFERSIZE - 32] = { '0' };
 	// add Id to text buffer
 	sprintf(transactionBuffer + strlen(transactionBuffer), "%d", id);
 	// Add product name

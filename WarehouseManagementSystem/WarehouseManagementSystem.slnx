@@ -3,5 +3,8 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="LoggerTest/LoggerTest.vcxproj">
+    <BuildDependency Project="WarehouseManagementSystem/WarehouseManagementSystem.vcxproj" />
+  </Project>
   <Project Path="WarehouseManagementSystem/WarehouseManagementSystem.vcxproj" Id="9654c48c-644e-4b49-b45d-c96f2cee5cd7" />
 </Solution>

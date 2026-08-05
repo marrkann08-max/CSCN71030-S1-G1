@@ -1,7 +1,9 @@
 #pragma once
+#include <stdio.h>
+
 /*
 Author; Alex
-Input: char* containing the text that will be placed in file
+Input: char* containing the text that will be placed in file and the file pointer because units test break without it
 Output: 0 if it fails. 1 if it succeeds
 purpose: Write a string to the file
 */
@@ -10,7 +12,7 @@ int writeToFile(char* text);
 /*
 Author; Alex
 Input: File path to log file
-Output: 0 if it fails. 1 if it succeeds
+Output: -1 if it fails. 0 if it succeeds
 purpose: on startup to open file and write start up message
 */
 int logInit(char* filePath);
@@ -31,6 +33,7 @@ purpose: At end, print closing message, close file, clear buffer.
 */
 int logTransaction(int id, int amount, int IO, int approved);
 
+//#endif
 /*test cases
 
 The Logger module shall append a new entry to the transaction log file each time a transaction is processed.
@@ -40,11 +43,6 @@ test case: did the program write to file as intended
 
 
 
-The Logger module shall receive the log file path from Main and shall not hardcode any file paths internally.
-The Logger module shall open and close the log file for each transaction and shall not leave any file handles open between calls.
-The Logger module shall write a session start entry to the log file when the program starts.
-test case: did it open file correctly and leave start up message
-1 test since the only thing that can change is file path and it will create new if one inst there.
 
 The Logger module shall record a cancelled status for any transaction that could not be completed.
 The Logger module shall indicate whether each transaction was incoming or outgoing stock.
