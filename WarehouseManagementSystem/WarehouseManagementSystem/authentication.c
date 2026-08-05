@@ -1,6 +1,6 @@
 #include "authentication.h"
+#include "utilities.h"
 
-#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -11,16 +11,21 @@ static const char credentials[AUTH_MAX_USERS][2][AUTH_FIELD_SIZE] =
     { "warehouse", "Warehouse123" }
 };
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: A source string and a writable fixed-capacity destination.
+ * Output: Stores a trimmed validated copy and returns 0, or returns -1.
+ * Purpose: Safely prepare credential fields using the shared Utilities module.
+ */
 static int copy_trimmed_field(
     const char* source,
     char destination[AUTH_FIELD_SIZE]
 )
 {
-    size_t begin = 0U;
-    size_t end;
     size_t length = 0U;
 
-    if (source == NULL)
+    if (util_check_null(source) != 0 ||
+        util_check_null(destination) != 0)
     {
         return -1;
     }
@@ -30,33 +35,21 @@ static int copy_trimmed_field(
         ++length;
     }
 
-    if (length == 0U || length == AUTH_FIELD_SIZE)
+    if (length == AUTH_FIELD_SIZE)
     {
         return -1;
     }
 
-    while (begin < length && isspace((unsigned char)source[begin]))
-    {
-        ++begin;
-    }
-
-    end = length;
-    while (end > begin && isspace((unsigned char)source[end - 1U]))
-    {
-        --end;
-    }
-
-    if (begin == end)
-    {
-        return -1;
-    }
-
-    memcpy(destination, source + begin, end - begin);
-    destination[end - begin] = '\0';
-
-    return 0;
+    memcpy(destination, source, length + 1U);
+    return util_validate_string(destination, AUTH_FIELD_SIZE - 1U);
 }
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Prompt text and a writable fixed-capacity input buffer.
+ * Output: Stores one complete input field and returns 0, or returns -1.
+ * Purpose: Read bounded interactive input and discard overlength input safely.
+ */
 static int read_field(
     const char* prompt,
     char buffer[AUTH_FIELD_SIZE]
@@ -97,6 +90,12 @@ static int read_field(
     return -1;
 }
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Username and password strings.
+ * Output: Returns 0 for valid credentials and -1 otherwise.
+ * Purpose: Compare validated credentials without reading interactive input.
+ */
 int authenticate(
     const char* username,
     const char* password
@@ -126,6 +125,12 @@ int authenticate(
     return -1;
 }
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Writable username output buffer and its capacity.
+ * Output: Stores the authenticated username and returns 0, or returns -1.
+ * Purpose: Enforce a maximum of three interactive login attempts.
+ */
 int authentication_login(
     char* output_username,
     size_t output_size
@@ -148,6 +153,7 @@ int authentication_login(
             read_field("Password: ", password) != 0)
         {
             memset(password, 0, sizeof(password));
+            fprintf(stderr, "Invalid username or password.\n");
             continue;
         }
 
@@ -173,7 +179,9 @@ int authentication_login(
         }
 
         memset(password, 0, sizeof(password));
+        fprintf(stderr, "Invalid username or password.\n");
     }
 
+    fprintf(stderr, "Access denied after three failed attempts.\n");
     return -1;
 }
