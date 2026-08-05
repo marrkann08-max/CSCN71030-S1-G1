@@ -4,7 +4,7 @@
 /*
 Author; Alex
 Input: char* containing the text that will be placed in file and the file pointer because units test break without it
-Output: 0 if it fails. 1 if it succeeds
+Output: -1 if it fails. 0 if it succeeds
 purpose: Write a string to the file
 */
 int writeToFile(char* text);
