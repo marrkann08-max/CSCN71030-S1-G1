@@ -169,6 +169,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AuthenticationTests.cpp" />
+    <ClCompile Include="..\WarehouseManagementSystem\authentication.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

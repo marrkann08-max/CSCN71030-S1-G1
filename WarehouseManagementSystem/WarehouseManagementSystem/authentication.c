@@ -1,12 +1,29 @@
 #include "authentication.h"
 
+#include <string.h>
+
+static const char credentials[AUTH_MAX_USERS][2][AUTH_FIELD_SIZE] =
+{
+    { "admin", "Admin123" },
+    { "manager", "Manager123" },
+    { "warehouse", "Warehouse123" }
+};
+
 int authenticate(
     const char* username,
     const char* password
 )
 {
-    (void)username;
-    (void)password;
+    size_t index;
+
+    for (index = 0U; index < AUTH_MAX_USERS; ++index)
+    {
+        if (strcmp(username, credentials[index][0]) == 0 &&
+            strcmp(password, credentials[index][1]) == 0)
+        {
+            return 0;
+        }
+    }
 
     return -1;
 }
