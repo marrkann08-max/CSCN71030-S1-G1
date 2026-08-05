@@ -18,7 +18,18 @@ int order_process(Product* head, Order* order) {
     return -1;
 }
 int processReceive(Product* head, unsigned int productID, int quantity) {
-    return 0;
+    Product* current = head;
+    if (head == NULL || quantity <= 0) {
+        return ORDER_FAILURE;
+    }
+    while (current != NULL) {
+        if (current->id == productID) {
+            current->quantity += quantity;
+            return ORDER_SUCCESS;
+        }
+        current = current->next;
+    }
+    return ORDER_FAILURE;
 }
 int processDispatch(Product* head, unsigned int productID, int quantity) {
     return 0;
