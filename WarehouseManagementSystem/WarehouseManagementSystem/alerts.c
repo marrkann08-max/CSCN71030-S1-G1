@@ -1,9 +1,12 @@
 #include "alerts.h"
 
+#include <ctype.h>
 #include <stdio.h>
+#include <string.h>
 
 #define PRODUCT_NAME_CAPACITY 64U
 #define PRODUCT_LOCATION_CAPACITY 32U
+#define ALERT_PATH_CAPACITY 512U
 
 /* Matches the shared Inventory module's public Product layout. */
 struct Product
@@ -15,22 +18,69 @@ struct Product
     struct Product* next;
 };
 
-int check_low_stock(
-    const Product* head,
-    int threshold,
+static int copy_alert_path(
+    char destination[ALERT_PATH_CAPACITY],
     const char* file_path
 )
 {
-    const Product* current;
-    FILE* file = NULL;
-    int flagged_count = 0;
+    size_t begin = 0U;
+    size_t end;
+    size_t length = 0U;
 
     if (file_path == NULL)
     {
         return -1;
     }
 
-    if (fopen_s(&file, file_path, "w") != 0 || file == NULL)
+    while (length < ALERT_PATH_CAPACITY && file_path[length] != '\0')
+    {
+        ++length;
+    }
+
+    if (length == 0U || length == ALERT_PATH_CAPACITY)
+    {
+        return -1;
+    }
+
+    while (begin < length && isspace((unsigned char)file_path[begin]))
+    {
+        ++begin;
+    }
+
+    end = length;
+    while (end > begin && isspace((unsigned char)file_path[end - 1U]))
+    {
+        --end;
+    }
+
+    if (begin == end)
+    {
+        return -1;
+    }
+
+    memcpy(destination, file_path + begin, end - begin);
+    destination[end - begin] = '\0';
+    return 0;
+}
+
+int check_low_stock(
+    const Product* head,
+    int threshold,
+    const char* file_path
+)
+{
+    char validated_path[ALERT_PATH_CAPACITY];
+    const Product* current;
+    FILE* file = NULL;
+    int flagged_count = 0;
+
+    if (threshold <= 0 ||
+        copy_alert_path(validated_path, file_path) != 0)
+    {
+        return -1;
+    }
+
+    if (fopen_s(&file, validated_path, "w") != 0 || file == NULL)
     {
         return -1;
     }
@@ -68,6 +118,16 @@ int check_low_stock(
         }
 
         current = current->next;
+    }
+
+    if (flagged_count == 0 &&
+        fputs(
+            "No products are below the configured threshold.\n",
+            file
+        ) == EOF)
+    {
+        fclose(file);
+        return -1;
     }
 
     if (fclose(file) != 0)

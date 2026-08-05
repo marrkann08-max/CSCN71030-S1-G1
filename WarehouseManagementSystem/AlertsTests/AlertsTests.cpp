@@ -32,6 +32,12 @@ namespace AlertsTests
         return contents.str();
     }
 
+    static void write_file(const char* path, const char* contents)
+    {
+        std::ofstream output(path, std::ios::trunc);
+        output << contents;
+    }
+
     TEST_CLASS(AlertsFunctionalTests)
     {
     public:
@@ -54,6 +60,38 @@ namespace AlertsTests
             Assert::IsTrue(report.find("1002") == std::string::npos);
             Assert::IsTrue(report.find("Safety Gloves") == std::string::npos);
             Assert::IsTrue(report.find("1003") == std::string::npos);
+
+            std::remove(report_path);
+        }
+
+        TEST_METHOD(ALR_F_002_NoMatchesAndInvalidInputs)
+        {
+            const char* report_path = "alerts_no_matches.txt";
+            Product second = { 1002U, "Drill Press", 25, "B-02", nullptr };
+            Product first = { 1001U, "Safety Gloves", 10, "A-01", &second };
+
+            Assert::AreEqual(
+                0,
+                check_low_stock(&first, 1, report_path)
+            );
+            Assert::IsTrue(
+                read_file(report_path).find(
+                    "No products are below the configured threshold."
+                ) != std::string::npos
+            );
+
+            write_file(report_path, "sentinel-content\n");
+
+            Assert::AreEqual(-1, check_low_stock(&first, 0, report_path));
+            Assert::IsTrue(
+                read_file(report_path).find("sentinel-content") !=
+                std::string::npos
+            );
+
+            Assert::AreEqual(-1, check_low_stock(&first, -1, report_path));
+            Assert::AreEqual(-1, check_low_stock(&first, 10, nullptr));
+            Assert::AreEqual(-1, check_low_stock(&first, 10, ""));
+            Assert::AreEqual(-1, check_low_stock(&first, 10, "   "));
 
             std::remove(report_path);
         }
