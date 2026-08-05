@@ -1,6 +1,7 @@
 #include "authentication.h"
 
 #include <ctype.h>
+#include <stdio.h>
 #include <string.h>
 
 static const char credentials[AUTH_MAX_USERS][2][AUTH_FIELD_SIZE] =
@@ -56,6 +57,46 @@ static int copy_trimmed_field(
     return 0;
 }
 
+static int read_field(
+    const char* prompt,
+    char buffer[AUTH_FIELD_SIZE]
+)
+{
+    size_t length;
+    int character;
+
+    fputs(prompt, stdout);
+
+    if (fgets(buffer, (int)AUTH_FIELD_SIZE, stdin) == NULL)
+    {
+        return -1;
+    }
+
+    length = strlen(buffer);
+
+    if (length > 0U && buffer[length - 1U] == '\n')
+    {
+        buffer[length - 1U] = '\0';
+        return 0;
+    }
+
+    character = getchar();
+
+    if (character == '\n' || character == EOF)
+    {
+        return 0;
+    }
+
+    do
+    {
+        character = getchar();
+    }
+    while (character != '\n' && character != EOF);
+
+    buffer[0] = '\0';
+    return -1;
+}
+
 int authenticate(
     const char* username,
     const char* password
@@ -90,8 +131,49 @@ int authentication_login(
     size_t output_size
 )
 {
-    (void)output_username;
-    (void)output_size;
+    char username[AUTH_FIELD_SIZE];
+    char normalized_username[AUTH_FIELD_SIZE];
+    char password[AUTH_FIELD_SIZE];
+    size_t attempt;
+    size_t username_length;
+
+    if (output_username == NULL || output_size == 0U)
+    {
+        return -1;
+    }
+
+    for (attempt = 0U; attempt < AUTH_MAX_ATTEMPTS; ++attempt)
+    {
+        if (read_field("Username: ", username) != 0 ||
+            read_field("Password: ", password) != 0)
+        {
+            memset(password, 0, sizeof(password));
+            continue;
+        }
+
+        if (authenticate(username, password) == 0 &&
+            copy_trimmed_field(username, normalized_username) == 0)
+        {
+            username_length = strlen(normalized_username);
+
+            if (username_length >= output_size)
+            {
+                memset(password, 0, sizeof(password));
+                return -1;
+            }
+
+            memcpy(
+                output_username,
+                normalized_username,
+                username_length + 1U
+            );
+
+            memset(password, 0, sizeof(password));
+            return 0;
+        }
+
+        memset(password, 0, sizeof(password));
+    }
 
     return -1;
 }
