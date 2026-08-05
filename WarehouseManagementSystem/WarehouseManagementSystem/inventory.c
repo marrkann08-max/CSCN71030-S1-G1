@@ -5,213 +5,213 @@
 #include <string.h>
 
 Product* inventory_get_product(
-    Product* head,
-    unsigned int id
+	Product* head,
+	unsigned int id
 )
 {
-    Product* current = head;
+	Product* current = head;
 
-    while (current != NULL)
-    {
-        if (current->id == id)
-        {
-            return current;
-        }
+	while (current != NULL)
+	{
+		if (current->id == id)
+		{
+			return current;
+		}
 
-        current = current->next;
-    }
+		current = current->next;
+	}
 
-    return NULL;
+	return NULL;
 }
 
 int inventory_add_product(
-    Product** head,
-    unsigned int id,
-    const char* name,
-    int quantity,
-    const char* location
+	Product** head,
+	unsigned int id,
+	const char* name,
+	int quantity,
+	const char* location
 )
 {
-    Product* new_product;
-    Product* current;
-    char validated_name[PRODUCT_NAME_LENGTH];
-    char validated_location[PRODUCT_LOCATION_LENGTH];
-    size_t name_length;
-    size_t location_length;
+	Product* new_product;
+	Product* current;
+	char validated_name[PRODUCT_NAME_LENGTH];
+	char validated_location[PRODUCT_LOCATION_LENGTH];
+	size_t name_length;
+	size_t location_length;
 
-    if (util_check_null(head) != 0 ||
-        util_check_null(name) != 0 ||
-        util_check_null(location) != 0 ||
-        id == 0U ||
-        quantity < 0)
-    {
-        return -1;
-    }
+	if (util_check_null(head) != 0 ||
+		util_check_null(name) != 0 ||
+		util_check_null(location) != 0 ||
+		id == 0U ||
+		quantity < 0)
+	{
+		return -1;
+	}
 
-    if (inventory_get_product(*head, id) != NULL)
-    {
-        return -1;
-    }
+	if (inventory_get_product(*head, id) != NULL)
+	{
+		return -1;
+	}
 
-    name_length = strlen(name);
+	name_length = strlen(name);
 
-    if (name_length >= PRODUCT_NAME_LENGTH)
-    {
-        name_length = PRODUCT_NAME_LENGTH - 1U;
-    }
+	if (name_length >= PRODUCT_NAME_LENGTH)
+	{
+		name_length = PRODUCT_NAME_LENGTH - 1U;
+	}
 
-    memcpy(validated_name, name, name_length);
-    validated_name[name_length] = '\0';
+	memcpy(validated_name, name, name_length);
+	validated_name[name_length] = '\0';
 
-    location_length = strlen(location);
+	location_length = strlen(location);
 
-    if (location_length >= PRODUCT_LOCATION_LENGTH)
-    {
-        location_length = PRODUCT_LOCATION_LENGTH - 1U;
-    }
+	if (location_length >= PRODUCT_LOCATION_LENGTH)
+	{
+		location_length = PRODUCT_LOCATION_LENGTH - 1U;
+	}
 
-    memcpy(validated_location, location, location_length);
-    validated_location[location_length] = '\0';
+	memcpy(validated_location, location, location_length);
+	validated_location[location_length] = '\0';
 
-    if (util_validate_string(
-        validated_name,
-        PRODUCT_NAME_LENGTH - 1U
-    ) != 0 ||
-        util_validate_string(
-            validated_location,
-            PRODUCT_LOCATION_LENGTH - 1U
-        ) != 0)
-    {
-        return -1;
-    }
+	if (util_validate_string(
+		validated_name,
+		PRODUCT_NAME_LENGTH - 1U
+	) != 0 ||
+		util_validate_string(
+			validated_location,
+			PRODUCT_LOCATION_LENGTH - 1U
+		) != 0)
+	{
+		return -1;
+	}
 
-    new_product = malloc(sizeof(Product));
+	new_product = (Product*)malloc(sizeof(Product));
 
-    if (new_product == NULL)
-    {
-        return -1;
-    }
+	if (new_product == NULL)
+	{
+		return -1;
+	}
 
-    new_product->id = id;
-    memcpy(
-        new_product->name,
-        validated_name,
-        strlen(validated_name) + 1U
-    );
-    new_product->quantity = quantity;
-    memcpy(
-        new_product->location,
-        validated_location,
-        strlen(validated_location) + 1U
-    );
-    new_product->next = NULL;
+	new_product->id = id;
+	memcpy(
+		new_product->name,
+		validated_name,
+		strlen(validated_name) + 1U
+	);
+	new_product->quantity = quantity;
+	memcpy(
+		new_product->location,
+		validated_location,
+		strlen(validated_location) + 1U
+	);
+	new_product->next = NULL;
 
-    if (*head == NULL)
-    {
-        *head = new_product;
-        return 0;
-    }
+	if (*head == NULL)
+	{
+		*head = new_product;
+		return 0;
+	}
 
-    current = *head;
+	current = *head;
 
-    while (current->next != NULL)
-    {
-        current = current->next;
-    }
+	while (current->next != NULL)
+	{
+		current = current->next;
+	}
 
-    current->next = new_product;
+	current->next = new_product;
 
-    return 0;
+	return 0;
 }
 
 int inventory_update_quantity(
-    Product* head,
-    unsigned int id,
-    int new_quantity
+	Product* head,
+	unsigned int id,
+	int new_quantity
 )
 {
-    Product* product;
+	Product* product;
 
-    if (util_check_null(head) != 0 ||
-        id == 0U ||
-        new_quantity < 0)
-    {
-        return -1;
-    }
+	if (util_check_null(head) != 0 ||
+		id == 0U ||
+		new_quantity < 0)
+	{
+		return -1;
+	}
 
-    product = inventory_get_product(head, id);
+	product = inventory_get_product(head, id);
 
-    if (product == NULL)
-    {
-        return -1;
-    }
+	if (product == NULL)
+	{
+		return -1;
+	}
 
-    product->quantity = new_quantity;
+	product->quantity = new_quantity;
 
-    return 0;
+	return 0;
 }
 
 int inventory_delete_product(
-    Product** head,
-    unsigned int id
+	Product** head,
+	unsigned int id
 )
 {
-    Product* current;
-    Product* previous;
+	Product* current;
+	Product* previous;
 
-    if (util_check_null(head) != 0 ||
-        id == 0U ||
-        *head == NULL)
-    {
-        return -1;
-    }
+	if (util_check_null(head) != 0 ||
+		id == 0U ||
+		*head == NULL)
+	{
+		return -1;
+	}
 
-    current = *head;
-    previous = NULL;
+	current = *head;
+	previous = NULL;
 
-    while (current != NULL && current->id != id)
-    {
-        previous = current;
-        current = current->next;
-    }
+	while (current != NULL && current->id != id)
+	{
+		previous = current;
+		current = current->next;
+	}
 
-    if (current == NULL)
-    {
-        return -1;
-    }
+	if (current == NULL)
+	{
+		return -1;
+	}
 
-    if (previous == NULL)
-    {
-        *head = current->next;
-    }
-    else
-    {
-        previous->next = current->next;
-    }
+	if (previous == NULL)
+	{
+		*head = current->next;
+	}
+	else
+	{
+		previous->next = current->next;
+	}
 
-    free(current);
+	free(current);
 
-    return 0;
+	return 0;
 }
 
 void inventory_free_all(Product** head)
 {
-    Product* current;
-    Product* next_product;
+	Product* current;
+	Product* next_product;
 
-    if (head == NULL)
-    {
-        return;
-    }
+	if (head == NULL)
+	{
+		return;
+	}
 
-    current = *head;
+	current = *head;
 
-    while (current != NULL)
-    {
-        next_product = current->next;
-        free(current);
-        current = next_product;
-    }
+	while (current != NULL)
+	{
+		next_product = current->next;
+		free(current);
+		current = next_product;
+	}
 
-    *head = NULL;
+	*head = NULL;
 }

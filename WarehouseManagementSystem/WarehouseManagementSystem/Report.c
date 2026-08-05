@@ -8,7 +8,7 @@
 #include <time.h>
 
 // Generate the name of the file into the string given
-int genReportName(char* buffer) {
+void genReportName(char* buffer) {
 	// Generate a buffer to store time
 	char timeBuffer[32] = { '0' };
 	// Add work report
@@ -22,7 +22,6 @@ int genReportName(char* buffer) {
 	// Add time stamp to file name
 	strcat(buffer, timeBuffer);
 	Sleep(1000); // makes it impossible for two reports with the same name
-	return 0;
 }
 int report_generate_text(Product** head, const char* filePath) {
 	// Create a buffer for the name
@@ -34,11 +33,18 @@ int report_generate_text(Product** head, const char* filePath) {
 	strcat(fileName, ".txt");
 	// open the file
 	FILE* reportFile = fopen(fileName, "w");
+	// If it failed to create file
+	if (reportFile == NULL) {
+		printf("ERROR: failed to make report file");
+		return -1;
+	}
 	Product* currentNode = *head;
 	while (currentNode != NULL) {
 		fprintf(reportFile, "ID: %d	Name: %s	Amount: %d	Location: %s\n", currentNode->id, currentNode->name, currentNode->quantity, currentNode->location);
 		currentNode = currentNode->next;
 	}
+	//close file
+	fclose(reportFile);
 	return 0;
 }
 
@@ -52,11 +58,18 @@ int report_generate_csv(Product** head, const char* filePath) {
 	strcat(fileName, ".csv");
 	// open the file
 	FILE* reportFile = fopen(fileName, "w");
+	// If it failed to create file
+	if (reportFile == NULL) {
+		printf("ERROR: failed to make report file");
+		return -1;
+	}
 	Product* currentNode = *head;
 	while (currentNode != NULL) {
 		fprintf(reportFile, "%d,%s,%d,%s\n", currentNode->id, currentNode->name, currentNode->quantity, currentNode->location);
 		currentNode = currentNode->next;
 	}
+	//close file
+	fclose(reportFile);
 	return 0;
 }
 
