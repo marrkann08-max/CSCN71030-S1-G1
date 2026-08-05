@@ -50,6 +50,9 @@ int processReceive(Product* head, unsigned int productID, int quantity) {
     }
     while (current != NULL) {
         if (current->id == productID) {
+            if (current->quantity > INT_MAX - quantity) {
+                return ORDER_FAILURE;
+            }
             current->quantity += quantity;
             return ORDER_SUCCESS;
         }
@@ -64,6 +67,9 @@ int processDispatch(Product* head, unsigned int productID, int quantity) {
     }
     while (current != NULL) {
         if (current->id == productID) {
+            if (current->quantity < quantity) {
+                return ORDER_FAILURE;
+            }
             current->quantity -= quantity;
             return ORDER_SUCCESS;
         }
@@ -79,8 +85,11 @@ void order_free(Order* order) {
 
 }
 int order_simulate(Product* head, unsigned int seed) {
+    if (head == NULL) {
     return -1;
 }
-int main(void) {
-    return 0;
+    srand(seed);
+        int quantity = (rand() % 10) + 1;
+        char type = (rand() % 2 == 0) ? ORDER_RECEIVE : ORDER_DISPATCH;
+    return (type == ORDER_RECEIVE)? processReceive(head, head->id, quantity): processDispatch(head, head->id, quantity);
 }
