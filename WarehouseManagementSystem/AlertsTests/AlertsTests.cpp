@@ -1,16 +1,61 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
+#include <cstdio>
+#include <fstream>
+#include <sstream>
+#include <string>
+
+extern "C"
+{
+#include "../WarehouseManagementSystem/alerts.h"
+}
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+struct Product
+{
+    unsigned int id;
+    char name[64];
+    int quantity;
+    char location[32];
+    Product* next;
+};
 
 namespace AlertsTests
 {
-	TEST_CLASS(AlertsTests)
-	{
-	public:
-		
-		TEST_METHOD(TestMethod1)
-		{
-		}
-	};
+    static std::string read_file(const char* path)
+    {
+        std::ifstream input(path);
+        std::ostringstream contents;
+        contents << input.rdbuf();
+        return contents.str();
+    }
+
+    TEST_CLASS(AlertsFunctionalTests)
+    {
+    public:
+        TEST_METHOD(ALR_F_001_SelectOnlyProductsBelowThreshold)
+        {
+            const char* report_path = "alerts_below_threshold.txt";
+            Product third = { 1003U, "Drill Press", 25, "C-03", nullptr };
+            Product second = { 1002U, "Safety Gloves", 10, "B-02", &third };
+            Product first = { 1001U, "Hammer", 5, "A-01", &second };
+
+            Assert::AreEqual(
+                1,
+                check_low_stock(&first, 10, report_path)
+            );
+
+            const std::string report = read_file(report_path);
+            Assert::IsTrue(report.find("Threshold: 10") != std::string::npos);
+            Assert::IsTrue(report.find("1001") != std::string::npos);
+            Assert::IsTrue(report.find("Hammer") != std::string::npos);
+            Assert::IsTrue(report.find("1002") == std::string::npos);
+            Assert::IsTrue(report.find("Safety Gloves") == std::string::npos);
+            Assert::IsTrue(report.find("1003") == std::string::npos);
+
+            std::remove(report_path);
+        }
+    };
 }
