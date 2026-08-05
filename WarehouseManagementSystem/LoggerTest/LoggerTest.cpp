@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
+#include <fstream>
 #include <cstring>
 extern "C" {
 #pragma warning(disable : 4996)
@@ -17,21 +18,51 @@ namespace LoggerTest
 
 		TEST_METHOD(InitSucceed)
 		{
-			char* filePath = "Logger/";
+			char* filePath = "TestStuff.txt";
 			Assert::AreEqual(0, logInit(filePath));
+		}
+		TEST_METHOD(InitFail)
+		{
+			char* filePath = "NoExist/";
+			Assert::AreEqual(-1, logInit(filePath));
 		}
 		TEST_METHOD(WriteBufferOverflow)
 		{
 			char* overflowString = "adsjhfbsaodhifbSKDJFBLKSAjdfblksajxvblkJXbvlkasdbglkasjdhflkajdshflkajsdfblkasjdhflksajhdflksajdhflkasdjhflksadjhflksajhdflksajhdf";
 			Assert::AreEqual(-1, writeToFile(overflowString));
 		}
-		TEST_METHOD(WriteFileNotFound)
+		TEST_METHOD(WriteNormal)
 		{
 			char* normalString = "Hello world";
-			Assert::AreEqual(-1, writeToFile(normalString));
+			Assert::AreEqual(0, writeToFile(normalString));
 		}
-		TEST_METHOD(NormaleWrite) // not possible since unit test cant create the damn file
+		TEST_METHOD(TransactionImport)
 		{
+			int id = 634200;
+			int quantity = 69;
+			int transactionInformation = 1; // 1 for import. -1 for export. 0 for order cancelled
+			Assert::AreEqual(0, logTransaction(id, quantity, transactionInformation));
+		}
+		TEST_METHOD(TransactionExport)
+		{
+			int id = 634200;
+			int quantity = 69;
+			int transactionInformation = -1; // 1 for import. -1 for export. 0 for order cancelled
+			Assert::AreEqual(0, logTransaction(id, quantity, transactionInformation));
+		}
+		TEST_METHOD(TransactionCancelled)
+		{
+			int id = 634200;
+			int quantity = 69;
+			int transactionInformation = 0; // 1 for import. -1 for export. 0 for order cancelled
+			Assert::AreEqual(0, logTransaction(id, quantity, transactionInformation));
+		}
+		TEST_METHOD(TransactionFail)// i failed to get it to fail. ROFL
+		{
+			int id = 634213471313615695;
+			int quantity = 6931321231451345354;
+			int transactionInformation = 89; // 1 for import. -1 for export. 0 for order cancelled
+			Assert::AreEqual(-1, logTransaction(id, quantity, transactionInformation));
 		}
 	};
 }

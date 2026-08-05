@@ -31,26 +31,4 @@ Input: Transaction information
 Output: -1 if it failed to write to file. 0 if it succeeded.
 purpose: At end, print closing message, close file, clear buffer.
 */
-int logTransaction(int id, int amount, int IO, int approved);
-
-//#endif
-/*test cases
-
-The Logger module shall append a new entry to the transaction log file each time a transaction is processed.
-The Logger module shall record a timestamp for every transaction entry.
-test case: did the program write to file as intended
-1 test to make the function return a string and check if it matches?
-
-
-
-
-The Logger module shall record a cancelled status for any transaction that could not be completed.
-The Logger module shall indicate whether each transaction was incoming or outgoing stock.
-The Logger module shall receive transaction details from the Orders module and write them to the log file.
-The Logger module shall record the product ID, product name, quantity, and timestamp for each transaction.
-test case: did it create the order string as intended
-6 tests: if it is outgoing. incoming. id does not match any item. quaintly is not possible, working as intended. if it was cancelled
-
-The Logger module shall call the Utilities module to validate all inputs before writing to the log file.
-what?
-*/
+int logTransaction(int id, int amount, int info);

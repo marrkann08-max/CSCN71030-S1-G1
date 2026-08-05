@@ -45,11 +45,6 @@ int writeToFile(char* text) {
 	strcat(textBuffer, text);
 	//add \n
 	strcat(textBuffer, "\n");
-	//check if the file pointer is null
-	if (logFile == NULL) {
-		printf("ERROR: Logger failed to find open file");
-		return -1;
-	}
 	// write buffer to file.Will return negative if it failed
 	if (fprintf(logFile, textBuffer) < 0) {
 		printf("ERROR: Logger failed to write to file.");
@@ -57,7 +52,6 @@ int writeToFile(char* text) {
 	}
 	return 0;
 }
-
 
 /*
 Author; Alex
@@ -71,11 +65,11 @@ int logInit(char* filePath) {
 	//Check if file failed to open. iif file fails to open, exit
 	if (logFile == NULL) {
 		printf("Failed to open log file.");
-		return 0;
+		return -1;
 	}
 	//print startup message
 	writeToFile("Program starting...");
-	return 1;
+	return 0;
 }
 
 /*
@@ -99,7 +93,7 @@ Input: Transaction information
 Output: 0 when the transaction is recorded successfully or -1 when writing fails.
 purpose: Format and record a successful or rejected warehouse transaction.
 */
-int logTransaction(int id, int amount, int IO, int approved) {
+int logTransaction(int id, int amount, int info) {
 	char transactionBuffer[BUFFERSIZE - 32] = { '0' };
 	// add Id to text buffer
 	sprintf(transactionBuffer + strlen(transactionBuffer), "%d", id);
@@ -108,18 +102,14 @@ int logTransaction(int id, int amount, int IO, int approved) {
 	strcat(transactionBuffer, getItemName(id));
 	// Add amount name
 	sprintf(transactionBuffer + strlen(transactionBuffer), "; %d", amount);
-	// Iif it was an export
-	if (approved == -1) {
+	// export if the number was 1
+	if (info == -1) {
 		strcat(transactionBuffer, "; Export");
 	}
-	else {
+	else if (info == 1) {
 		strcat(transactionBuffer, "; Import");
 	}
-	// Pass string to write function
-	// iif it was approved
-	if (approved == 1) {
-		strcat(transactionBuffer, "; Approved;");
-	}
+	// The number was 0 or anything else
 	else {
 		strcat(transactionBuffer, "; Cancelled;");
 	}
@@ -128,5 +118,5 @@ int logTransaction(int id, int amount, int IO, int approved) {
 		printf("ERROR: logger failed to log transaction");
 		return -1;
 	}
-	return 1;
+	return 0;
 }
