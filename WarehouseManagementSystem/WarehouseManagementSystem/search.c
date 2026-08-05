@@ -4,6 +4,22 @@
 static SearchHistoryEntry history[SEARCH_HISTORY_CAPACITY];
 static int historyCount = 0;
 Product* search_by_id(Product* head, unsigned int productID) {
+    Product* current = head;
+
+    if (head == NULL || productID == 0)
+    {
+	return NULL;
+}
+
+    while (current != NULL)
+    {
+        if (current->id == productID)
+        {
+            return current;
+        }
+
+        current = current->next;
+    }
 	return NULL;
 }
 int search_by_name(Product* head, const char* keyword, SearchResult* result) {
