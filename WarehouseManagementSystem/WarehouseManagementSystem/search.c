@@ -18,8 +18,8 @@ Product* search_by_id(Product* head, unsigned int productID) {
 
     if (head == NULL || productID == 0) // validate input parameters
     {
-	return NULL;
-}
+        return NULL;
+    }
 
     while (current != NULL) // Traverse the linked list until the Product is found or the end is reached.
     {
@@ -99,7 +99,7 @@ int search_by_name(Product* head, const char* keyword, SearchResult* result) {
         }
         current=current->next;
     }
-	return 0;
+    return 0;
 }
 /*Function: search_below_threshold
 Purpose:Search the Inventory for Products whose quantity is below the specified threshold.
@@ -141,7 +141,7 @@ int search_below_threshold(Product* head, int threshold, SearchResult* result) {
         }
         current = current->next;
     }
-	return 0;
+    return 0;
 }
 /*Function: search_by_quantity_range
 Purpose:Search the Inventory for Products whose quantities fall within the specified inclusive range.
@@ -184,7 +184,7 @@ int search_by_quantity_range(Product* head, int minimum, int maximum, SearchResu
         }
         current = current->next;
     }
-	return 0;
+    return 0;
 }
 /*Function: search_all_products
 Purpose:Retrieve all Products currently stored in the Inventory.
@@ -221,7 +221,7 @@ int search_all_products(Product* head, SearchResult* result) {
         result->products[count++] = current;
         current = current->next;
     }
-	return 0;
+    return 0;
 }
 /*Function: search_free_results
 Purpose:Release dynamically allocated memory used by a SearchResult structure.
@@ -260,7 +260,7 @@ int search_record_history(const char* criteria, int resultCount) {
     strcpy_s(history[historyCount].criteria, SEARCH_TEXT_LENGTH, criteria); //store new search entry
     history[historyCount].resultCount = resultCount;
     historyCount++;
-	return 0;
+    return 0;
 }
 /*Function: search_get_history
 Purpose:Retrieve the recent search history entries.
