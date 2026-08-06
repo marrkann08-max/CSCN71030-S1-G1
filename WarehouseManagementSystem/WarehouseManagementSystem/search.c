@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
 #include"search.h"
 static SearchHistoryEntry history[SEARCH_HISTORY_CAPACITY];
 static int historyCount = 0;
@@ -22,7 +24,53 @@ Product* search_by_id(Product* head, unsigned int productID) {
     }
 	return NULL;
 }
+static int containsIgnoreCase(const char* text, const char* pattern) {
+    while (*text)
+    {
+        const char* t = text;
+        const char* p = pattern;
+        while (*t && *p && tolower((unsigned char)*t), tolower((unsigned char)*p)) {
+            t++;
+            p++;
+        }
+        if (*p == '\0') {
+            return 1;
+        }
+        text++;
+    }
+    return 0;
+}
 int search_by_name(Product* head, const char* keyword, SearchResult* result) {
+    Product* current;
+    int count = 0;
+    if (head == NULL || keyword == NULL || result == NULL || strlen(keyword) == 0) {
+        return -1;
+    }
+    current = head;
+    while (current != NULL) {
+        if (containsIgnoreCase(current->name, keyword)) {
+            count++;
+        }
+        current = current->next;
+    }
+    result->count = count;
+    if (count == 0) {
+        result->products = NULL;
+        return 0;
+    }
+    result->products = (Product**)malloc(sizeof(Product*) * count);
+    if (result->products == NULL) {
+        result->count = 0;
+        return -1;
+    }
+    current = head;
+    count = 0;
+    while (current != NULL) {
+        if (containsIgnoreCase(current->name, keyword)) {
+            result->products[count++] = current;
+        }
+        current=current->next;
+    }
 	return 0;
 }
 int search_below_threshold(Product* head, int threshold, SearchResult* result) {
@@ -35,7 +83,12 @@ int search_all_products(Product* head, SearchResult* result) {
 	return 0;
 }
 void search_free_results(SearchResult* result) {
-
+    if (result == NULL) {
+        return;
+    }
+    free(result->products);
+    result->products = NULL;
+    result->count = 0;
 }
 int search_record_history(const char* criteria, int resultCount) {
 	return 0;
