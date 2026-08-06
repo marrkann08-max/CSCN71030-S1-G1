@@ -3,6 +3,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="AlertsTests/AlertsTests.vcxproj" />
   <Project Path="InventoryTests/InventoryTests.vcxproj" />
   <Project Path="Configtests/Configtests.vcxproj" />
   <Project Path="Utilitiestests/Utilitiestests.vcxproj" />

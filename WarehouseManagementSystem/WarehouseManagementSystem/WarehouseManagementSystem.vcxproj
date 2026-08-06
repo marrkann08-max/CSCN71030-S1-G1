@@ -139,11 +139,13 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="alerts.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="inventory.h" />
     <ClInclude Include="utilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="alerts.c" />
     <ClCompile Include="config.c" />
     <ClCompile Include="inventory.c" />
     <ClCompile Include="main.c" />
