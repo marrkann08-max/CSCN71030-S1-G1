@@ -3,6 +3,10 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="LoggerTest/LoggerTest.vcxproj" />
+  <Project Path="AuthenticationTests/AuthenticationTests.vcxproj" />
+  <Project Path="AlertsTests/AlertsTests.vcxproj" />
+  <Project Path="InventoryTests/InventoryTests.vcxproj" />
   <Project Path="Configtests/Configtests.vcxproj" />
   <Project Path="searchtests/searchtests.vcxproj" />
   <Project Path="Utilitiestests/Utilitiestests.vcxproj" />
