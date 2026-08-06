@@ -1,24 +1,30 @@
-#pragma once
+#ifndef REPORT_H
+#define REPORT_H
+
 #include "inventory.h"
 
-/*
-Author; Alex
-Input: char* with a pointer to the buffer it will add the name of the report to
-Output: nothing
-purpose: Append the name of the report to the already existing buffer
-*/
-void genReportName(char* buffer);
-/*
-Author; Alex
-Input: a pointer to the first node of the inventory list. char* with the path to the folder the file is in
-Output: -1 if it fails. 0 if it succeeds
-purpose: Generate the report using the filepath and link to first node in list. list is a .txt
-*/
-int report_generate_text(Product** head, const char* filePath);
-/*
-Author; Alex
-Input: a pointer to the first node of the inventory list. char* with the path to the folder the file is in
-Output: -1 if it fails. 0 if it succeeds
-purpose: Generate the report using the filepath and link to first node in list. list is a .csv
-*/
-int report_generate_csv(Product** head, const char* filePath);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * Creates a timestamped, human-readable inventory report in directory.
+ * An empty inventory produces a report containing only the headings.
+ *
+ * @return 0 on success, or -1 for invalid input or a file-system error.
+ */
+int report_generate_text(Product** head, const char* directory);
+
+/**
+ * Creates a timestamped CSV inventory report in directory.
+ * Fields containing commas, quotes, or line breaks are escaped correctly.
+ *
+ * @return 0 on success, or -1 for invalid input or a file-system error.
+ */
+int report_generate_csv(Product** head, const char* directory);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

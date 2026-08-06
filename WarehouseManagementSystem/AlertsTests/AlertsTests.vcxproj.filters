@@ -15,15 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ReportTest.cpp">
+    <ClCompile Include="AlertsTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WarehouseManagementSystem\alerts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WarehouseManagementSystem\inventory.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WarehouseManagementSystem\utilities.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\Report.c"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\inventory.c"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\utilities.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">

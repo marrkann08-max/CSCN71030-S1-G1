@@ -29,7 +29,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -139,15 +139,30 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="authentication.h" />
+    <ClInclude Include="alerts.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="inventory.h" />
+    <ClInclude Include="orders.h" />
+    <ClInclude Include="Report.h" />
+    <ClInclude Include="search.h" />
+    <ClInclude Include="utilities.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Logger.c" />
+    <ClCompile Include="authentication.c" />
+    <ClCompile Include="alerts.c" />
+    <ClCompile Include="config.c" />
     <ClCompile Include="inventory.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Report.c" />
+    <ClCompile Include="orders.c" />
+    <ClCompile Include="search.c" />
     <ClCompile Include="utilities.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inventory.h" />
-    <ClInclude Include="Report.h" />
-    <ClInclude Include="utilities.h" />
+    <Text Include="config.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -199,21 +199,74 @@ namespace InventoryTests
 
             Assert::AreEqual(
                 0,
-                inventory_update_quantity(head, 1001U, 12)
+                inventory_add_product(
+                    &head,
+                    1002U,
+                    "Drill",
+                    3,
+                    "A-02"
+                )
             );
-            Assert::AreEqual(12, head->quantity);
+
+            Product* hammer =
+                inventory_get_product(head, 1001U);
+            Product* drill =
+                inventory_get_product(head, 1002U);
+
+            Assert::IsNotNull(hammer);
+            Assert::IsNotNull(drill);
 
             Assert::AreEqual(
-                -1,
-                inventory_update_quantity(head, 9999U, 20)
+                0,
+                inventory_update_quantity(head, 1001U, 10)
             );
-            Assert::AreEqual(12, head->quantity);
+            Assert::AreEqual(10, hammer->quantity);
+
+            Assert::AreEqual(
+                0,
+                inventory_update_quantity(head, 1001U, 0)
+            );
+            Assert::AreEqual(0, hammer->quantity);
 
             Assert::AreEqual(
                 -1,
                 inventory_update_quantity(head, 1001U, -1)
             );
-            Assert::AreEqual(12, head->quantity);
+            Assert::AreEqual(0, hammer->quantity);
+
+            Assert::AreEqual(
+                -1,
+                inventory_update_quantity(head, 9999U, 20)
+            );
+            Assert::AreEqual(0, hammer->quantity);
+
+            Assert::AreEqual(
+                -1,
+                inventory_update_quantity(head, 0U, 20)
+            );
+            Assert::AreEqual(0, hammer->quantity);
+
+            Assert::AreEqual(
+                static_cast<size_t>(2),
+                count_products(head)
+            );
+            Assert::AreEqual(1001U, hammer->id);
+            Assert::IsTrue(
+                std::strcmp(hammer->name, "Hammer") == 0
+            );
+            Assert::IsTrue(
+                std::strcmp(hammer->location, "A-01") == 0
+            );
+            Assert::IsTrue(hammer->next == drill);
+            Assert::AreEqual(1002U, drill->id);
+            Assert::IsTrue(
+                std::strcmp(drill->name, "Drill") == 0
+            );
+            Assert::AreEqual(3, drill->quantity);
+            Assert::IsTrue(
+                std::strcmp(drill->location, "A-02") == 0
+            );
+            Assert::IsNull(drill->next);
 
             inventory_free_all(&head);
         }
@@ -245,6 +298,9 @@ namespace InventoryTests
                 0,
                 inventory_delete_product(&head, 1002U)
             );
+            Assert::IsNull(
+                inventory_get_product(head, 1002U)
+            );
             Assert::AreEqual(
                 static_cast<size_t>(2),
                 count_products(head)
@@ -257,12 +313,52 @@ namespace InventoryTests
                 0,
                 inventory_delete_product(&head, 1001U)
             );
+            Assert::IsNull(
+                inventory_get_product(head, 1001U)
+            );
             Assert::AreEqual(1003U, head->id);
 
             Assert::AreEqual(
                 0,
                 inventory_delete_product(&head, 1003U)
             );
+            Assert::IsNull(
+                inventory_get_product(head, 1003U)
+            );
+            Assert::IsNull(head);
+
+            Assert::AreEqual(
+                -1,
+                inventory_delete_product(&head, 1001U)
+            );
+
+            Assert::AreEqual(
+                0,
+                inventory_add_product(
+                    &head, 2001U, "Saw", 2, "B-01"
+                )
+            );
+            Assert::AreEqual(
+                0,
+                inventory_add_product(
+                    &head, 2002U, "Level", 4, "B-02"
+                )
+            );
+            Assert::AreEqual(
+                0,
+                inventory_add_product(
+                    &head, 2003U, "Tape", 6, "B-03"
+                )
+            );
+            Assert::AreEqual(
+                static_cast<size_t>(3),
+                count_products(head)
+            );
+
+            inventory_free_all(&head);
+            Assert::IsNull(head);
+
+            inventory_free_all(&head);
             Assert::IsNull(head);
         }
 
