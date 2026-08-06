@@ -5,6 +5,10 @@
 
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define MENU_INPUT_CAPACITY 64U
 
 typedef enum MenuChoice
@@ -40,3 +44,7 @@ int parse_menu_choice(char* input, MenuChoice* out_choice);
  * Purpose: Read one menu selection safely from standard input.
  */
 int read_menu_choice(MenuChoice* out_choice);
+
+#ifdef __cplusplus
+}
+#endif
