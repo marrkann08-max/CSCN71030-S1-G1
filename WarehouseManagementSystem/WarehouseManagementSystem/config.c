@@ -13,6 +13,7 @@
 #define CONFIG_LINE_CAPACITY 256U
 
 /*
+ * Author: Ivan Immanuel Shaji
  * Input: Config pointer plus one setting name and value.
  * Output: Stores a validated recognized value and returns 0, otherwise -1.
  * Purpose: Validate settings consistently before changing the Config object.
@@ -53,6 +54,7 @@ static int apply_setting(Config* config, const char* name, const char* value)
 }
 
 /*
+ * Author: Ivan Immanuel Shaji
  * Input: An open ASCII input stream positioned inside an overlength line.
  * Output: Advances the stream to the next line or end of file.
  * Purpose: Recover safely after fgets cannot hold one complete input line.
@@ -73,6 +75,7 @@ static void discard_line_remainder(FILE* file)
 }
 
 /*
+ * Author: Ivan Immanuel Shaji
  * Input: Startup argument count, startup argument array, and an output pointer.
  * Output: Populates out_config and returns 0, or returns -1 for invalid inputs.
  * Purpose: Load defaults, file settings, and command-line overrides in order.
@@ -104,6 +107,7 @@ int load_config(int argc, char* argv[], Config* out_config)
 }
 
 /*
+ * Author: Ivan Immanuel Shaji
  * Input: ASCII configuration-file path and a Config output pointer.
  * Output: Updates valid fields and returns 0, or returns -1 on any file error.
  * Purpose: Read threshold and seed values from an ASCII configuration file.
@@ -190,6 +194,7 @@ int read_config_file(const char* path, Config* out_config)
 }
 
 /*
+ * Author: Ivan Immanuel Shaji
  * Input: Startup argument count, startup argument array, and a Config pointer.
  * Output: Applies valid overrides and returns 0, or returns -1 for bad options.
  * Purpose: Apply validated --threshold and --seed command-line overrides.
@@ -249,6 +254,7 @@ int apply_cli_overrides(int argc, char* argv[], Config* out_config)
 }
 
 /*
+ * Author: Ivan Immanuel Shaji
  * Input: Read-only pointer to a populated Config structure.
  * Output: Displays the active threshold and seed values.
  * Purpose: Make the active configuration visible to the user.
