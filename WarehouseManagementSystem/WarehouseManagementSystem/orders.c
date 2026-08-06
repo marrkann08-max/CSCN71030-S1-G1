@@ -276,7 +276,6 @@ int order_simulate(Product* head, unsigned int seed)
 {
     Product* selected;
     Order* order;
-    unsigned int state;
     size_t product_count = 0U;
     size_t selected_index;
     int quantity;
@@ -293,8 +292,8 @@ int order_simulate(Product* head, unsigned int seed)
         ++product_count;
     }
 
-    state = seed * 1664525U + 1013904223U;
-    selected_index = (size_t)(state % (unsigned int)product_count);
+    srand(seed);
+    selected_index = (size_t)rand() % product_count;
     selected = head;
 
     while (selected_index-- > 0U)
@@ -302,10 +301,8 @@ int order_simulate(Product* head, unsigned int seed)
         selected = selected->next;
     }
 
-    state = state * 1664525U + 1013904223U;
-    quantity = (int)(state % 10U) + 1;
-    state = state * 1664525U + 1013904223U;
-    type = (state % 2U == 0U) ? ORDER_RECEIVE : ORDER_DISPATCH;
+    quantity = rand() % 10 + 1;
+    type = (rand() % 2 == 0) ? ORDER_RECEIVE : ORDER_DISPATCH;
 
     order = order_create(selected->id, quantity, type);
 
