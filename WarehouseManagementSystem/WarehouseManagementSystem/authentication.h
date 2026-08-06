@@ -12,7 +12,7 @@ extern "C" {
 #define AUTH_MAX_ATTEMPTS 3U
 
     /*
-     * Author: Keshav Kumar Markan
+     * Author: Navkirat Kaur
      * Input: Username and password strings.
      * Output: Returns 0 for valid credentials and -1 otherwise.
      * Purpose: Validate credentials without reading interactive input.
@@ -23,7 +23,7 @@ extern "C" {
     );
 
     /*
-     * Author: Keshav Kumar Markan
+     * Author: Navkirat Kaur
      * Input: Writable username output buffer and its capacity.
      * Output: Stores the authenticated username and returns 0, or returns -1.
      * Purpose: Allow at most three interactive authentication attempts.

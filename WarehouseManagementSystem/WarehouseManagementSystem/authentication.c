@@ -12,7 +12,7 @@ static const char credentials[AUTH_MAX_USERS][2][AUTH_FIELD_SIZE] =
 };
 
 /*
- * Author: Keshav Kumar Markan
+ * Author: Navkirat Kaur
  * Input: A source string and a writable fixed-capacity destination.
  * Output: Stores a trimmed validated copy and returns 0, or returns -1.
  * Purpose: Safely prepare credential fields using the shared Utilities module.
@@ -45,7 +45,7 @@ static int copy_trimmed_field(
 }
 
 /*
- * Author: Keshav Kumar Markan
+ * Author: Navkirat Kaur
  * Input: Prompt text and a writable fixed-capacity input buffer.
  * Output: Stores one complete input field and returns 0, or returns -1.
  * Purpose: Read bounded interactive input and discard overlength input safely.
@@ -91,7 +91,7 @@ static int read_field(
 }
 
 /*
- * Author: Keshav Kumar Markan
+ * Author: Navkirat Kaur
  * Input: Username and password strings.
  * Output: Returns 0 for valid credentials and -1 otherwise.
  * Purpose: Compare validated credentials without reading interactive input.
@@ -126,7 +126,7 @@ int authenticate(
 }
 
 /*
- * Author: Keshav Kumar Markan
+ * Author: Navkirat Kaur
  * Input: Writable username output buffer and its capacity.
  * Output: Stores the authenticated username and returns 0, or returns -1.
  * Purpose: Enforce a maximum of three interactive login attempts.
