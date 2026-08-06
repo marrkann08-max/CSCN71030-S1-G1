@@ -114,7 +114,7 @@ int logTransaction(int id, int amount, int info) {
 		strcat(transactionBuffer, "; Cancelled;");
 	}
 	// Pass string to write function. Also check if it failed to write
-	if (writeToFile(transactionBuffer) > 0) {
+	if (writeToFile(transactionBuffer) < 0) {
 		printf("ERROR: logger failed to log transaction");
 		return -1;
 	}
