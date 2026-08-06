@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 /*
- * Author: Keshav Kumar Markan
+ * Author: Navkirat Kaur
  * Input: Inventory head, positive threshold, and writable report path.
  * Output: Returns the number of low-stock products, or -1 on failure.
  * Purpose: Report products whose quantities are below the threshold.

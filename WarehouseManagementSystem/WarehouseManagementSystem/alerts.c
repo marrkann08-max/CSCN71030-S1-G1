@@ -8,7 +8,7 @@
 #define ALERT_PATH_CAPACITY 512U
 
 /*
- * Author: Keshav Kumar Markan
+ * Author: Navkirat Kaur
  * Input: Writable destination and a source report-file path.
  * Output: Stores a validated path and returns 0, or returns -1.
  * Purpose: Validate report paths using the shared Utilities module.
@@ -41,7 +41,7 @@ static int copy_alert_path(
 }
 
 /*
- * Author: Keshav Kumar Markan
+ * Author: Navkirat Kaur
  * Input: Open output stream and one Inventory Product.
  * Output: Writes one record and returns 0, or returns -1.
  * Purpose: Produce a consistent low-stock record without changing Product.
@@ -66,7 +66,7 @@ static int write_low_stock_record(
 }
 
 /*
- * Author: Keshav Kumar Markan
+ * Author: Navkirat Kaur
  * Input: Inventory head, positive threshold, and writable report path.
  * Output: Returns the number of low-stock products, or -1 on failure.
  * Purpose: Write low-stock warnings while leaving Inventory unchanged.
