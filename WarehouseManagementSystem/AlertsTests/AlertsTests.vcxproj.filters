@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LoggerTest.cpp">
+    <ClCompile Include="AlertsTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\Logger.c">
+    <ClCompile Include="..\WarehouseManagementSystem\alerts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WarehouseManagementSystem\inventory.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\WarehouseManagementSystem\utilities.c">

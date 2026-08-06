@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LoggerTest.cpp">
+    <ClCompile Include="AuthenticationTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\Logger.c">
+    <ClCompile Include="..\WarehouseManagementSystem\authentication.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\WarehouseManagementSystem\utilities.c">

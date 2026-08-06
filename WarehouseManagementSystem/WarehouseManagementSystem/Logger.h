@@ -1,34 +1,56 @@
-#pragma once
-#include <stdio.h>
+#ifndef LOGGER_H
+#define LOGGER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define LOGGER_USERNAME_CAPACITY 64U
+#define LOGGER_PRODUCT_NAME_CAPACITY 64U
+#define LOGGER_MESSAGE_CAPACITY 512U
+#define LOGGER_TRANSACTION_RECEIVE 'R'
+#define LOGGER_TRANSACTION_DISPATCH 'D'
 
 /*
-Author; Alex
-Input: char* containing the text that will be placed in file and the file pointer because units test break without it
-Output: -1 if it fails. 0 if it succeeds
-purpose: Write a string to the file
-*/
-int writeToFile(char* text);
+ * Author: Alex and Keshav Kumar Markan
+ * Input: A writable log-file path and the authenticated username.
+ * Output: Opens the append-only session log and writes a startup entry.
+ * Purpose: Initialize Logger before any other logging operation.
+ */
+int logger_initialize(const char* file_path, const char* username);
 
 /*
-Author; Alex
-Input: File path to log file
-Output: -1 if it fails. 0 if it succeeds
-purpose: on startup to open file and write start up message
-*/
-int logInit(char* filePath);
+ * Author: Alex and Keshav Kumar Markan
+ * Input: A validated text message.
+ * Output: Appends a timestamped entry for the authenticated user.
+ * Purpose: Record general application activity safely.
+ */
+int logger_write_string(const char* text);
 
 /*
-Author; Alex
-Input: Nothing
-Output: Nothing
-purpose: At end, print closing message, close file, clear buffer.
-*/
-void logCleanUp();
+ * Author: Alex and Keshav Kumar Markan
+ * Input: Product details, transaction type, and approval status.
+ * Output: Appends one complete timestamped transaction entry.
+ * Purpose: Record approved and rejected warehouse transactions.
+ */
+int logger_write_transaction(
+    unsigned int product_id,
+    const char* product_name,
+    int quantity,
+    char transaction_type,
+    int approved
+);
 
 /*
-Author; Alex
-Input: Transaction information
-Output: -1 if it failed to write to file. 0 if it succeeded.
-purpose: At end, print closing message, close file, clear buffer.
-*/
-int logTransaction(int id, int amount, int info);
+ * Author: Alex and Keshav Kumar Markan
+ * Input: The current module-local Logger state.
+ * Output: Writes the shutdown entry, closes the file, and clears state.
+ * Purpose: End a Logger session safely; repeated calls are harmless.
+ */
+void logger_shutdown(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
