@@ -29,7 +29,7 @@ static int containsIgnoreCase(const char* text, const char* pattern) {
     {
         const char* t = text;
         const char* p = pattern;
-        while (*t && *p && tolower((unsigned char)*t), tolower((unsigned char)*p)) {
+        while (*t && *p && tolower((unsigned char)*t) == tolower((unsigned char)*p)) {
             t++;
             p++;
         }
@@ -74,12 +74,98 @@ int search_by_name(Product* head, const char* keyword, SearchResult* result) {
 	return 0;
 }
 int search_below_threshold(Product* head, int threshold, SearchResult* result) {
+    Product* current;
+    int count = 0;
+    if (head == NULL || result == NULL || threshold < 0) {
+        return -1;
+    }
+    current = head;
+    while (current != NULL) {
+        if (current->quantity < threshold) {
+            count++;
+        }
+        current = current->next;
+    }
+    result->count = count;
+    if (count == 0) {
+        result->products = NULL;
+        return 0;
+    }
+    result->products = (Product**)malloc(sizeof(Product*) * count);
+    if (result->products == NULL) {
+        result->count = 0;
+        return -1;
+    }
+    current = head;
+    count = 0;
+    while (current != NULL) {
+        if (current->quantity < threshold) {
+            result->products[count++] = current;
+        }
+        current = current->next;
+    }
 	return 0;
 }
 int search_by_quantity_range(Product* head, int minimum, int maximum, SearchResult* result) {
+    Product* current;
+    int count = 0;
+    if (head == NULL || result == NULL || minimum>maximum) {
+        return -1;
+    }
+    current = head;
+    while (current != NULL) {
+        if (current->quantity >= minimum && current->quantity <= maximum) {
+            count++;
+        }
+        current = current->next;
+    }
+    result->count = count;
+    if (count == 0) {
+        result->products = NULL;
+        return 0;
+    }
+    result->products = (Product**)malloc(sizeof(Product*) * count);
+    if (result->products == NULL) {
+        result->count = 0;
+        return -1;
+    }
+    current = head;
+    count = 0;
+    while (current != NULL) {
+        if (current->quantity >= minimum && current->quantity <= maximum) {
+            result->products[count++] = current;
+        }
+        current = current->next;
+    }
 	return 0;
 }
 int search_all_products(Product* head, SearchResult* result) {
+    Product* current;
+    int count = 0;
+    if (head == NULL || result == NULL) {
+        return -1;
+    }
+    current = head;
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+    result->count = count;
+    if (count == 0) {
+        result->products = NULL;
+        return 0;
+    }
+    result->products = (Product**)malloc(sizeof(Product*) * count);
+    if (result->products == NULL) {
+        result->count = 0;
+        return -1;
+    }
+    current = head;
+    count = 0;
+    while (current != NULL) {
+        result->products[count++] = current;
+        current = current->next;
+    }
 	return 0;
 }
 void search_free_results(SearchResult* result) {
