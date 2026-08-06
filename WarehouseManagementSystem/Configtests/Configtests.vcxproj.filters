@@ -15,31 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="authentication.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="authentication.c">
+    <ClCompile Include="Configtests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="config.c">
+    <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.c">
+    <ClCompile Include="..\WarehouseManagementSystem\config.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="utilities.c">
+    <ClCompile Include="..\WarehouseManagementSystem\utilities.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="config.txt" />
+    <ClInclude Include="pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
