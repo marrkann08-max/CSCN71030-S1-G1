@@ -15,7 +15,7 @@
 /*
  * Input: Config pointer plus one setting name and value.
  * Output: Stores a validated recognized value and returns 0, otherwise -1.
- * Purpose: Validate file settings before changing the Config structure.
+ * Purpose: Validate settings consistently before changing the Config object.
  */
 static int apply_setting(Config* config, const char* name, const char* value)
 {
@@ -53,9 +53,9 @@ static int apply_setting(Config* config, const char* name, const char* value)
 }
 
 /*
- * Input: An open ASCII stream positioned inside an overlength line.
+ * Input: An open ASCII input stream positioned inside an overlength line.
  * Output: Advances the stream to the next line or end of file.
- * Purpose: Recover safely when one line is longer than the input buffer.
+ * Purpose: Recover safely after fgets cannot hold one complete input line.
  */
 static void discard_line_remainder(FILE* file)
 {
@@ -74,17 +74,14 @@ static void discard_line_remainder(FILE* file)
 
 /*
  * Input: Startup argument count, startup argument array, and an output pointer.
- * Output: Populates out_config and returns 0, or returns -1 for invalid input.
- * Purpose: Initialize defaults and then read optional file-based settings.
+ * Output: Populates out_config and returns 0, or returns -1 for invalid inputs.
+ * Purpose: Load defaults, file settings, and command-line overrides in order.
  */
 int load_config(int argc, char* argv[], Config* out_config)
 {
 	Config loaded_config;
 
-	(void)argc;
-	(void)argv;
-
-	if (util_check_null(out_config) != 0)
+	if (argc < 1 || util_check_null(argv) != 0 || util_check_null(argv[0]) != 0 || util_check_null(out_config) != 0)
 	{
 		return -1;
 	}
@@ -97,13 +94,18 @@ int load_config(int argc, char* argv[], Config* out_config)
 		fprintf(stderr, "Warning: Config file could not be read; defaults were kept.\n");
 	}
 
+	if (apply_cli_overrides(argc, argv, &loaded_config) != 0)
+	{
+		fprintf(stderr, "Warning: One or more command-line settings were ignored; earlier values were kept.\n");
+	}
+
 	*out_config = loaded_config;
 	return 0;
 }
 
 /*
  * Input: ASCII configuration-file path and a Config output pointer.
- * Output: Updates valid fields and returns 0, or returns -1 on a file error.
+ * Output: Updates valid fields and returns 0, or returns -1 on any file error.
  * Purpose: Read threshold and seed values from an ASCII configuration file.
  */
 int read_config_file(const char* path, Config* out_config)
@@ -182,6 +184,65 @@ int read_config_file(const char* path, Config* out_config)
 	if (fclose(file) != 0)
 	{
 		result = -1;
+	}
+
+	return result;
+}
+
+/*
+ * Input: Startup argument count, startup argument array, and a Config pointer.
+ * Output: Applies valid overrides and returns 0, or returns -1 for bad options.
+ * Purpose: Apply validated --threshold and --seed command-line overrides.
+ */
+int apply_cli_overrides(int argc, char* argv[], Config* out_config)
+{
+	int index;
+	int result = 0;
+	const char* setting_name;
+
+	if (argc < 1 || util_check_null(argv) != 0 || util_check_null(out_config) != 0)
+	{
+		return -1;
+	}
+
+	for (index = 1; index < argc; ++index)
+	{
+		if (argv[index] == NULL)
+		{
+			fprintf(stderr, "Warning: Null command-line argument.\n");
+			result = -1;
+			continue;
+		}
+
+		if (strcmp(argv[index], "--threshold") == 0)
+		{
+			setting_name = "threshold";
+		}
+		else if (strcmp(argv[index], "--seed") == 0)
+		{
+			setting_name = "seed";
+		}
+		else
+		{
+			fprintf(stderr, "Warning: Unknown command-line option: %s\n", argv[index]);
+			result = -1;
+			continue;
+		}
+
+		if (index + 1 >= argc || argv[index + 1] == NULL || strncmp(argv[index + 1], "--", 2U) == 0)
+		{
+			fprintf(stderr, "Warning: Missing value for %s.\n", argv[index]);
+			result = -1;
+			continue;
+		}
+
+		++index;
+
+		if (apply_setting(out_config, setting_name, argv[index]) != 0)
+		{
+			fprintf(stderr, "Warning: Invalid value for --%s: %s\n", setting_name, argv[index]);
+			result = -1;
+		}
 	}
 
 	return result;
