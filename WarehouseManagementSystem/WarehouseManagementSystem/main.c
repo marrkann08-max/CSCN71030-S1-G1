@@ -26,6 +26,25 @@ int main(int argc, char* argv[])
 	}
 
 	print_config(&config);
+	display_menu();
 
 	return EXIT_SUCCESS;
+}
+
+/*
+ * Author: Ivan Immanuel Shaji
+ * Input: None.
+ * Output: Writes all available menu choices to standard output.
+ * Purpose: Display the Warehouse Management System menu.
+ */
+void display_menu(void)
+{
+	printf("\nWarehouse Management System\n");
+	printf("1. Inventory\n");
+	printf("2. Orders\n");
+	printf("3. Search\n");
+	printf("4. Reports\n");
+	printf("5. Alerts\n");
+	printf("0. Exit\n");
+	printf("Enter your selection: ");
 }
