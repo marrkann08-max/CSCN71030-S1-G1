@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Shared Inventory head and Product ID.
+ * Output: Returns the matching Product pointer, or NULL if it is not found.
+ * Purpose: Retrieve a Product from the Inventory by its unique ID.
+ */
 Product* inventory_get_product(
     Product* head,
     unsigned int id
@@ -24,6 +30,12 @@ Product* inventory_get_product(
     return NULL;
 }
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Inventory head, Product ID, name, quantity, and location.
+ * Output: Adds a Product and returns 0, or returns -1 if it cannot be added.
+ * Purpose: Validate, allocate, and store a Product in the linked list.
+ */
 int inventory_add_product(
     Product** head,
     unsigned int id,
@@ -124,6 +136,12 @@ int inventory_add_product(
     return 0;
 }
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Inventory head, Product ID, and new quantity.
+ * Output: Updates the matching quantity and returns 0, otherwise -1.
+ * Purpose: Change the stock quantity of an existing Product.
+ */
 int inventory_update_quantity(
     Product* head,
     unsigned int id,
@@ -151,6 +169,12 @@ int inventory_update_quantity(
     return 0;
 }
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Address of the Inventory head and Product ID.
+ * Output: Removes the matching Product and returns 0, otherwise -1.
+ * Purpose: Delete one Product and release its allocated memory.
+ */
 int inventory_delete_product(
     Product** head,
     unsigned int id
@@ -194,6 +218,12 @@ int inventory_delete_product(
     return 0;
 }
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Address of the Inventory head pointer.
+ * Output: Frees every Product and sets the head pointer to NULL.
+ * Purpose: Release all Inventory memory during cleanup.
+ */
 void inventory_free_all(Product** head)
 {
     Product* current;

@@ -72,6 +72,12 @@ static int contains_ignore_case(const char* text, const char* pattern)
     return 0;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Shared Inventory head and non-zero Product ID.
+ * Output: Returns the matching Product pointer, or NULL.
+ * Purpose: Find one Product by ID without changing Inventory.
+ */
 Product* search_by_id(Product* head, unsigned int productID)
 {
     if (util_check_null(head) != 0 || productID == 0U)
@@ -82,6 +88,12 @@ Product* search_by_id(Product* head, unsigned int productID)
     return inventory_get_product(head, productID);
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Shared Inventory, name keyword, and SearchResult pointer.
+ * Output: Stores case-insensitive matches and returns 0, otherwise -1.
+ * Purpose: Find Products whose names contain the supplied keyword.
+ */
 int search_by_name(Product* head, const char* keyword, SearchResult* result)
 {
     Product* current;
@@ -134,6 +146,12 @@ int search_by_name(Product* head, const char* keyword, SearchResult* result)
     return 0;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Shared Inventory, non-negative threshold, and result pointer.
+ * Output: Stores Products below the threshold and returns 0, otherwise -1.
+ * Purpose: Find low-stock Products without changing Inventory.
+ */
 int search_below_threshold(Product* head, int threshold, SearchResult* result)
 {
     Product* current;
@@ -169,6 +187,12 @@ int search_below_threshold(Product* head, int threshold, SearchResult* result)
     return 0;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Shared Inventory, inclusive quantity range, and result pointer.
+ * Output: Stores matching Products and returns 0, otherwise -1.
+ * Purpose: Find Products inside a validated quantity range.
+ */
 int search_by_quantity_range(
     Product* head,
     int minimum,
@@ -210,6 +234,12 @@ int search_by_quantity_range(
     return 0;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Shared Inventory head and SearchResult pointer.
+ * Output: Stores every Product pointer and returns 0, otherwise -1.
+ * Purpose: Return a non-owning snapshot of all Inventory Products.
+ */
 int search_all_products(Product* head, SearchResult* result)
 {
     Product* current;
@@ -239,6 +269,12 @@ int search_all_products(Product* head, SearchResult* result)
     return 0;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: SearchResult pointer, which may be NULL.
+ * Output: Frees Search-owned memory and resets the result fields.
+ * Purpose: Release result storage without freeing Inventory Products.
+ */
 void search_free_results(SearchResult* result)
 {
     if (result == NULL)
@@ -251,6 +287,12 @@ void search_free_results(SearchResult* result)
     result->count = 0;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Search description and non-negative result count.
+ * Output: Records the search and returns 0, otherwise -1.
+ * Purpose: Store the most recent validated Search summaries.
+ */
 int search_record_history(const char* criteria, int resultCount)
 {
     char validated_criteria[SEARCH_TEXT_LENGTH];
@@ -297,6 +339,12 @@ int search_record_history(const char* criteria, int resultCount)
     return 0;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Array with space for the Search history entries.
+ * Output: Copies the history and returns its count, otherwise -1.
+ * Purpose: Let Main display Search history without exposing internal state.
+ */
 int search_get_history(SearchHistoryEntry entries[])
 {
     int index;
@@ -314,6 +362,12 @@ int search_get_history(SearchHistoryEntry entries[])
     return historyCount;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Current module-local Search history.
+ * Output: Erases all stored history entries and resets the count.
+ * Purpose: Clear Search history safely and deterministically.
+ */
 void search_clear_history(void)
 {
     memset(history, 0, sizeof(history));
