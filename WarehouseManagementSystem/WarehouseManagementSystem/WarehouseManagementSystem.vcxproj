@@ -141,6 +141,12 @@
   <ItemGroup>
     <ClInclude Include="config.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="config.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="config.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
