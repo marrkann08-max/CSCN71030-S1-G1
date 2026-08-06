@@ -33,8 +33,8 @@ int writeToFile(char* text) {
 		printf("ERROR: logger buffer overflow");
 		return -1;
 	}
-	else if (logFile == NULL){
-	printf("ERROR: Logger found no file open");
+	else if (logFile == NULL) {
+		printf("ERROR: Logger found no file open");
 		return -1;
 	}
 	// get raw unix time
