@@ -81,5 +81,35 @@ namespace MainTests
 			Assert::AreEqual(-1, parse_menu_choice(nullptr, &choice));
 			Assert::AreEqual(-1, parse_menu_choice(valid, nullptr));
 		}
+
+		/*
+		 * Author: Ivan Immanuel Shaji
+		 * Input: Exit, empty-Alerts, invalid-choice, and null dispatch inputs.
+		 * Output: Verifies safe dispatch without interactive input or a crash.
+		 * Purpose: Test Main's module-routing boundary and pointer validation.
+		 */
+		TEST_METHOD(MN_F_004_DispatchValidation)
+		{
+			Config config = { 10, 2026U };
+			Product* head = nullptr;
+
+			Assert::AreEqual(
+				0,
+				dispatch_menu_option((int)MENU_EXIT, &head, &config)
+			);
+			Assert::AreEqual(
+				0,
+				dispatch_menu_option((int)MENU_ALERTS, &head, &config)
+			);
+			Assert::AreEqual(-1, dispatch_menu_option(99, &head, &config));
+			Assert::AreEqual(
+				-1,
+				dispatch_menu_option((int)MENU_EXIT, nullptr, &config)
+			);
+			Assert::AreEqual(
+				-1,
+				dispatch_menu_option((int)MENU_EXIT, &head, nullptr)
+			);
+		}
 	};
 }
