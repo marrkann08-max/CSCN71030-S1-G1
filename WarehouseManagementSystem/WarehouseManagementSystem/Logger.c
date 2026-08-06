@@ -18,7 +18,7 @@ char* getItemName(int id) { // Used on line 98
 //  dummy stuff ends here
 
 #define BUFFERSIZE 128
-FILE* logFile;
+static FILE* logFile;
 char textBuffer[BUFFERSIZE];
 
 /*
@@ -31,6 +31,10 @@ int writeToFile(char* text) {
 	// Check for buffer overflow
 	if (strlen(text) >= BUFFERSIZE) {
 		printf("ERROR: logger buffer overflow");
+		return -1;
+	}
+	else if (logFile == NULL){
+	printf("ERROR: Logger found no file open");
 		return -1;
 	}
 	// get raw unix time
@@ -68,7 +72,10 @@ int logInit(char* filePath) {
 		return -1;
 	}
 	//print startup message
-	writeToFile("Program starting...");
+	if (writeToFile("Program starting...") < 0) {
+		printf("Failed to write to log file.");
+		return -1;
+	}
 	return 0;
 }
 
@@ -85,6 +92,7 @@ void logCleanUp() {
 	fclose(logFile);
 	// Clear the buffer to leave no leftover information in memory
 	memset(textBuffer, 0, sizeof(textBuffer));
+	logFile = NULL;
 }
 
 /*
