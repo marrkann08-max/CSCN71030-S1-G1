@@ -6,6 +6,12 @@
 #include <limits.h>
 #include <stdlib.h>
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Editable text and the maximum permitted length.
+ * Output: Stores trimmed, bounded text and returns 0, otherwise -1.
+ * Purpose: Provide safe shared string validation for other modules.
+ */
 int util_validate_string(char* text, size_t max_length)
 {
     size_t original_length;
@@ -67,6 +73,12 @@ int util_validate_string(char* text, size_t max_length)
     return 0;
 }
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Pointer to validate.
+ * Output: Returns 0 for a valid pointer, or -1 for NULL.
+ * Purpose: Give all modules one consistent null-pointer check.
+ */
 int util_check_null(const void* pointer)
 {
     if (pointer == NULL)
@@ -77,6 +89,12 @@ int util_check_null(const void* pointer)
     return 0;
 }
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Numeric text, inclusive signed range, and output pointer.
+ * Output: Stores the converted integer and returns 0, otherwise -1.
+ * Purpose: Convert complete signed-integer input safely.
+ */
 int util_string_to_int(
     const char* text,
     int minimum,
@@ -122,6 +140,12 @@ int util_string_to_int(
     return 0;
 }
 
+/*
+ * Author: Keshav Kumar Markan
+ * Input: Numeric text, inclusive unsigned range, and output pointer.
+ * Output: Stores the converted unsigned integer and returns 0, otherwise -1.
+ * Purpose: Convert complete unsigned-integer input safely.
+ */
 int util_string_to_uint(
     const char* text,
     unsigned int minimum,

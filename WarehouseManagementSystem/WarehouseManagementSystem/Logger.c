@@ -98,6 +98,12 @@ static int write_record(const char* message)
     return 0;
 }
 
+/*
+ * Author: Alex English and Keshav Kumar Markan
+ * Input: Writable log-file path and authenticated username.
+ * Output: Opens the log and returns 0, or returns -1 on failure.
+ * Purpose: Start the Logger session before other logging operations.
+ */
 int logger_initialize(const char* file_path, const char* username)
 {
     char validated_path[LOGGER_PATH_CAPACITY];
@@ -130,6 +136,12 @@ int logger_initialize(const char* file_path, const char* username)
     return 0;
 }
 
+/*
+ * Author: Alex English and Keshav Kumar Markan
+ * Input: Validated message text.
+ * Output: Appends the message and returns 0, otherwise -1.
+ * Purpose: Record general application activity in the session log.
+ */
 int logger_write_string(const char* text)
 {
     char validated_text[LOGGER_MESSAGE_CAPACITY];
@@ -143,6 +155,12 @@ int logger_write_string(const char* text)
     return write_record(validated_text);
 }
 
+/*
+ * Author: Alex English and Keshav Kumar Markan
+ * Input: Product details, transaction type, and approval status.
+ * Output: Appends a transaction entry and returns 0, otherwise -1.
+ * Purpose: Record approved and rejected warehouse transactions.
+ */
 int logger_write_transaction(
     unsigned int product_id,
     const char* product_name,
@@ -192,6 +210,12 @@ int logger_write_transaction(
     return write_record(message);
 }
 
+/*
+ * Author: Alex English and Keshav Kumar Markan
+ * Input: Current Logger session state.
+ * Output: Writes the closing entry, closes the file, and clears the state.
+ * Purpose: End the Logger session safely during program cleanup.
+ */
 void logger_shutdown(void)
 {
     FILE* file_to_close;

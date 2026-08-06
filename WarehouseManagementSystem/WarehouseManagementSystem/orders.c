@@ -65,11 +65,23 @@ static int order_log(
         : ORDER_FAILURE;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Logger-compatible transaction function, or NULL.
+ * Output: Stores the Logger function for later Orders operations.
+ * Purpose: Connect or disconnect Orders transaction logging.
+ */
 void order_set_logger(OrderLogger logger)
 {
     transaction_logger = logger;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Product ID, positive quantity, and receive or dispatch type.
+ * Output: Returns a new Order pointer, or NULL for invalid input/failure.
+ * Purpose: Validate and dynamically allocate an Order.
+ */
 Order* order_create(unsigned int productID, int quantity, char orderType)
 {
     Order* order;
@@ -93,6 +105,12 @@ Order* order_create(unsigned int productID, int quantity, char orderType)
     return order;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Shared Inventory head and valid Order pointer.
+ * Output: Updates Order status and returns success or failure.
+ * Purpose: Validate, log, and apply an Order to Inventory safely.
+ */
 int order_process(Product* head, Order* order)
 {
     Product* product;
@@ -180,6 +198,12 @@ int order_process(Product* head, Order* order)
     return ORDER_SUCCESS;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Shared Inventory, Product ID, and positive receive quantity.
+ * Output: Increases stock and returns success, otherwise failure.
+ * Purpose: Apply a validated receive operation without overflow.
+ */
 int processReceive(Product* head, unsigned int productID, int quantity)
 {
     Product* product;
@@ -203,6 +227,12 @@ int processReceive(Product* head, unsigned int productID, int quantity)
         : ORDER_FAILURE;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Shared Inventory, Product ID, and positive dispatch quantity.
+ * Output: Reduces stock and returns success, otherwise failure.
+ * Purpose: Apply a validated dispatch when enough stock is available.
+ */
 int processDispatch(Product* head, unsigned int productID, int quantity)
 {
     Product* product;
@@ -225,11 +255,23 @@ int processDispatch(Product* head, unsigned int productID, int quantity)
         : ORDER_FAILURE;
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Order pointer, which may be NULL.
+ * Output: Releases the Order memory.
+ * Purpose: Clean up a dynamically allocated Order safely.
+ */
 void order_free(Order* order)
 {
     free(order);
 }
 
+/*
+ * Author: Inderpreet Kaur Hundal
+ * Input: Shared Inventory and deterministic Config seed.
+ * Output: Processes one simulated Order and returns success or failure.
+ * Purpose: Run a reproducible Order through the normal Orders workflow.
+ */
 int order_simulate(Product* head, unsigned int seed)
 {
     Product* selected;
