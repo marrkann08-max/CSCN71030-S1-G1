@@ -9,6 +9,7 @@
   <Project Path="InventoryTests/InventoryTests.vcxproj" />
   <Project Path="ReportTest/ReportTest.vcxproj" />
   <Project Path="Configtests/Configtests.vcxproj" />
+  <Project Path="Maintests/Maintests.vcxproj" />
   <Project Path="orders_tests/orders_tests.vcxproj" />
   <Project Path="searchtests/searchtests.vcxproj" />
   <Project Path="Utilitiestests/Utilitiestests.vcxproj" />

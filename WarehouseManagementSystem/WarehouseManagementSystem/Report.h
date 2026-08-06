@@ -7,21 +7,21 @@
 extern "C" {
 #endif
 
-/**
- * Creates a timestamped, human-readable inventory report in directory.
- * An empty inventory produces a report containing only the headings.
- *
- * @return 0 on success, or -1 for invalid input or a file-system error.
+/*
+ * Author: Alex English and Ivan Immanuel Shaji
+ * Input: Read-only inventory list and caller-supplied text-file path.
+ * Output: Writes a timestamped inventory report and returns 0, otherwise -1.
+ * Purpose: Generate the complete human-readable inventory report.
  */
-int report_generate_text(Product** head, const char* directory);
+int report_generate_text(const Product* head, const char* file_path);
 
-/**
- * Creates a timestamped CSV inventory report in directory.
- * Fields containing commas, quotes, or line breaks are escaped correctly.
- *
- * @return 0 on success, or -1 for invalid input or a file-system error.
+/*
+ * Author: Alex English and Ivan Immanuel Shaji
+ * Input: Read-only inventory list and caller-supplied CSV-file path.
+ * Output: Writes a CSV inventory report and returns 0, otherwise -1.
+ * Purpose: Export the complete inventory for use by external tools.
  */
-int report_generate_csv(Product** head, const char* directory);
+int report_generate_csv(const Product* head, const char* file_path);
 
 #ifdef __cplusplus
 }

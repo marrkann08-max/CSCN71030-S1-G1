@@ -22,6 +22,7 @@
     <ClInclude Include="authentication.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="config.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="inventory.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="main.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="orders.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="Report.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="search.h"><Filter>Header Files</Filter></ClInclude>

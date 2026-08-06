@@ -143,6 +143,7 @@
     <ClInclude Include="authentication.h" />
     <ClInclude Include="alerts.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="inventory.h" />
     <ClInclude Include="orders.h" />
     <ClInclude Include="Report.h" />
