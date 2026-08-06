@@ -155,6 +155,15 @@ namespace AlertsTests
                 &head, 1001U, "Hammer", 5, "A-01"));
             write_file(report_path, "sentinel-content\n");
             Assert::AreEqual(-1, run_with_captured_stderr(
+                nullptr, 5, report_path, errors, sizeof(errors)));
+            Assert::IsTrue(std::strstr(
+                errors, "Invalid Inventory pointer."
+            ) != nullptr);
+            Assert::IsTrue(read_file(report_path).find(
+                "sentinel-content"
+            ) != std::string::npos);
+
+            Assert::AreEqual(-1, run_with_captured_stderr(
                 head, 0, report_path, errors, sizeof(errors)));
             Assert::IsTrue(std::strstr(
                 errors, "Invalid stock threshold."
@@ -202,15 +211,6 @@ namespace AlertsTests
 
             inventory_free_all(&head);
             Assert::IsNull(head);
-
-            Assert::AreEqual(0, check_low_stock(head, 6, report_path));
-            Assert::IsTrue(read_file(report_path).find(
-                "No products are below the configured threshold."
-            ) != std::string::npos);
-            Assert::IsTrue(read_file(report_path).find(
-                "Product ID:"
-            ) == std::string::npos);
-
             std::remove(report_path);
         }
     };
