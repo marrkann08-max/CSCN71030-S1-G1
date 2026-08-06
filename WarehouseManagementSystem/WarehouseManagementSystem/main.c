@@ -151,6 +151,7 @@ static void display_product(const Product* product)
 {
     if (product == NULL)
     {
+        printf("Item not found.\n");
         return;
     }
 
@@ -161,6 +162,11 @@ static void display_product(const Product* product)
         product->quantity,
         product->location
     );
+
+    if (product->quantity == 0)
+    {
+        printf("Status: Unavailable\n");
+    }
 }
 
 /*
@@ -202,6 +208,12 @@ static void display_search_results(const SearchResult* result)
     }
 
     printf("Matches: %d\n", result->count);
+
+    if (result->count == 0)
+    {
+        printf("Item not found.\n");
+        return;
+    }
 
     for (index = 0; index < result->count; ++index)
     {
