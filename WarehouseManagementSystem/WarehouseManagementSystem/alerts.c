@@ -82,12 +82,6 @@ int check_low_stock(
     FILE* file = NULL;
     int flagged_count = 0;
 
-    if (util_check_null(head) != 0)
-    {
-        fprintf(stderr, "Invalid Inventory pointer.\n");
-        return -1;
-    }
-
     if (threshold <= 0)
     {
         fprintf(stderr, "Invalid stock threshold.\n");

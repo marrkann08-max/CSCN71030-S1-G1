@@ -148,22 +148,12 @@ namespace AlertsTests
         TEST_METHOD(ALT_F_003_InvalidInputs)
         {
             const char* report_path = "alerts_invalid_inputs.txt";
-            const char* null_report_path = "alerts_null_inventory.txt";
             Product* head = nullptr;
             char errors[256] = "";
 
             Assert::AreEqual(0, inventory_add_product(
                 &head, 1001U, "Hammer", 5, "A-01"));
             write_file(report_path, "sentinel-content\n");
-            std::remove(null_report_path);
-
-            Assert::AreEqual(-1, run_with_captured_stderr(
-                nullptr, 5, null_report_path, errors, sizeof(errors)));
-            Assert::IsTrue(std::strstr(
-                errors, "Invalid Inventory pointer."
-            ) != nullptr);
-            Assert::IsFalse(std::ifstream(null_report_path).good());
-
             Assert::AreEqual(-1, run_with_captured_stderr(
                 head, 0, report_path, errors, sizeof(errors)));
             Assert::IsTrue(std::strstr(
@@ -212,6 +202,15 @@ namespace AlertsTests
 
             inventory_free_all(&head);
             Assert::IsNull(head);
+
+            Assert::AreEqual(0, check_low_stock(head, 6, report_path));
+            Assert::IsTrue(read_file(report_path).find(
+                "No products are below the configured threshold."
+            ) != std::string::npos);
+            Assert::IsTrue(read_file(report_path).find(
+                "Product ID:"
+            ) == std::string::npos);
+
             std::remove(report_path);
         }
     };
