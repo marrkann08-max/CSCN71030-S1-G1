@@ -28,8 +28,14 @@ typedef struct
     OrderStatus status;
 } Order;
 
-/* Matches Logger's supported logTransaction(id, amount, info) interface. */
-typedef int (*OrderLogger)(int id, int amount, int info);
+/* Matches Logger's final logger_write_transaction interface. */
+typedef int (*OrderLogger)(
+    unsigned int product_id,
+    const char* product_name,
+    int quantity,
+    char transaction_type,
+    int approved
+);
 
 /**
  * Author: Inder

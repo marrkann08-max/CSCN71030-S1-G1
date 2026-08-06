@@ -15,24 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="orders_tests.cpp">
+    <ClCompile Include="AuthenticationTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WarehouseManagementSystem\authentication.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WarehouseManagementSystem\utilities.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\inventory.c"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\Logger.c"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\orders.c"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\utilities.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\WarehouseManagementSystem\inventory.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="..\WarehouseManagementSystem\Logger.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="..\WarehouseManagementSystem\orders.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="..\WarehouseManagementSystem\utilities.h"><Filter>Header Files</Filter></ClInclude>
   </ItemGroup>
 </Project>

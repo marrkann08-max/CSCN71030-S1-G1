@@ -1,11 +1,12 @@
 #include "orders.h"
+#include "Logger.h"
 #include "utilities.h"
 
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-static OrderLogger transaction_logger = NULL;
+static OrderLogger transaction_logger = logger_write_transaction;
 
 /**
  * Author: Inder
@@ -36,18 +37,30 @@ static int order_validate(unsigned int productID, int quantity, char orderType)
 
 /**
  * Author: Inder
- * Input: Product ID, quantity, and Logger transaction classification.
+ * Input: Product details, transaction type, and approval status.
  * Output: Logger result, or ORDER_FAILURE when Logger is unavailable.
  * Purpose: Keep Orders dependent only on Logger's supported transaction signature.
  */
-static int order_log(unsigned int productID, int quantity, int info)
+static int order_log(
+    unsigned int productID,
+    const char* productName,
+    int quantity,
+    char orderType,
+    int approved
+)
 {
-    if (transaction_logger == NULL || productID > (unsigned int)INT_MAX)
+    if (transaction_logger == NULL)
     {
         return ORDER_FAILURE;
     }
 
-    return transaction_logger((int)productID, quantity, info) == 0
+    return transaction_logger(
+        productID,
+        productName,
+        quantity,
+        orderType,
+        approved
+    ) == 0
         ? ORDER_SUCCESS
         : ORDER_FAILURE;
 }
@@ -63,7 +76,6 @@ Order* order_create(unsigned int productID, int quantity, char orderType)
 
     if (order_validate(productID, quantity, orderType) != ORDER_SUCCESS)
     {
-        (void)order_log(productID, quantity, 0);
         return NULL;
     }
 
@@ -71,7 +83,6 @@ Order* order_create(unsigned int productID, int quantity, char orderType)
 
     if (order == NULL)
     {
-        (void)order_log(productID, quantity, 0);
         return NULL;
     }
 
@@ -86,7 +97,6 @@ int order_process(Product* head, Order* order)
 {
     Product* product;
     int new_quantity;
-    int log_info;
 
     if (order == NULL)
     {
@@ -99,7 +109,6 @@ int order_process(Product* head, Order* order)
         order_validate(order->productID, order->quantity, order->orderType) != ORDER_SUCCESS)
     {
         order->status = ORDER_REJECTED;
-        (void)order_log(order->productID, order->quantity, 0);
         return ORDER_FAILURE;
     }
 
@@ -108,7 +117,13 @@ int order_process(Product* head, Order* order)
     if (product == NULL || product->quantity < 0)
     {
         order->status = ORDER_REJECTED;
-        (void)order_log(order->productID, order->quantity, 0);
+        (void)order_log(
+            order->productID,
+            "Unknown Product",
+            order->quantity,
+            order->orderType,
+            0
+        );
         return ORDER_FAILURE;
     }
 
@@ -117,28 +132,44 @@ int order_process(Product* head, Order* order)
         if (product->quantity > INT_MAX - order->quantity)
         {
             order->status = ORDER_REJECTED;
-            (void)order_log(order->productID, order->quantity, 0);
+            (void)order_log(
+                order->productID,
+                product->name,
+                order->quantity,
+                order->orderType,
+                0
+            );
             return ORDER_FAILURE;
         }
 
         new_quantity = product->quantity + order->quantity;
-        log_info = 1;
     }
     else
     {
         if (product->quantity < order->quantity)
         {
             order->status = ORDER_REJECTED;
-            (void)order_log(order->productID, order->quantity, 0);
+            (void)order_log(
+                order->productID,
+                product->name,
+                order->quantity,
+                order->orderType,
+                0
+            );
             return ORDER_FAILURE;
         }
 
         new_quantity = product->quantity - order->quantity;
-        log_info = -1;
     }
 
     /* Log first: inventory is not changed if Logger rejects the transaction. */
-    if (order_log(order->productID, order->quantity, log_info) != ORDER_SUCCESS ||
+    if (order_log(
+            order->productID,
+            product->name,
+            order->quantity,
+            order->orderType,
+            1
+        ) != ORDER_SUCCESS ||
         inventory_update_quantity(head, order->productID, new_quantity) != 0)
     {
         order->status = ORDER_REJECTED;

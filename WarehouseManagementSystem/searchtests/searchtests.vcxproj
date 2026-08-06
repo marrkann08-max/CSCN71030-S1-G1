@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
-    <ProjectGuid>{56116117-1B8F-247F-9A26-DC6360C91EC2}</ProjectGuid>
+    <ProjectGuid>{B57037FC-5ED3-F58E-B79E-10E9B89B5094}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>orderstests</RootNamespace>
+    <RootNamespace>searchtests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectSubType>NativeUnitTestProject</ProjectSubType>
   </PropertyGroup>
@@ -168,31 +168,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="orders_tests.cpp" />
-    <ClCompile Include="..\WarehouseManagementSystem\inventory.c">
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\Logger.c">
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\orders.c">
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\utilities.c">
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="searchtests.cpp" />
+    <ClCompile Include="..\WarehouseManagementSystem\search.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\WarehouseManagementSystem\inventory.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\WarehouseManagementSystem\utilities.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="..\WarehouseManagementSystem\inventory.h" />
-    <ClInclude Include="..\WarehouseManagementSystem\Logger.h" />
-    <ClInclude Include="..\WarehouseManagementSystem\orders.h" />
+    <ClInclude Include="..\WarehouseManagementSystem\search.h" />
     <ClInclude Include="..\WarehouseManagementSystem\utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

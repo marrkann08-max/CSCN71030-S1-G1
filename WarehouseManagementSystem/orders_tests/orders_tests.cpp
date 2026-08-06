@@ -2,24 +2,38 @@
 #include "CppUnitTest.h"
 
 #include <climits>
+#include <cstdio>
 #include <cstring>
+#include <string>
 
 extern "C" {
 #include "../WarehouseManagementSystem/orders.h"
+#include "../WarehouseManagementSystem/Logger.h"
 }
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace orderstests
 {
+    static const char* integration_log_path = "orders_integration_test.log";
     static int logger_result = 0;
     static int logger_calls = 0;
-    static int logger_last_info = 0;
+    static int logger_last_approved = -1;
+    static char logger_last_type = '\0';
+    static std::string logger_last_product;
 
-    static int test_logger(int, int, int info)
+    static int test_logger(
+        unsigned int,
+        const char* product_name,
+        int,
+        char transaction_type,
+        int approved
+    )
     {
         ++logger_calls;
-        logger_last_info = info;
+        logger_last_product = product_name;
+        logger_last_type = transaction_type;
+        logger_last_approved = approved;
         return logger_result;
     }
 
@@ -30,12 +44,16 @@ namespace orderstests
         {
             logger_result = 0;
             logger_calls = 0;
-            logger_last_info = 0;
+            logger_last_approved = -1;
+            logger_last_type = '\0';
+            logger_last_product.clear();
             order_set_logger(test_logger);
         }
 
         TEST_METHOD_CLEANUP(Cleanup)
         {
+            logger_shutdown();
+            (void)std::remove(integration_log_path);
             order_set_logger(nullptr);
         }
 
@@ -54,8 +72,7 @@ namespace orderstests
             Assert::IsNull(order_create(1001U, 0, ORDER_RECEIVE));
             Assert::IsNull(order_create(1001U, -1, ORDER_RECEIVE));
             Assert::IsNull(order_create(1001U, 3, 'X'));
-            Assert::AreEqual(4, logger_calls);
-            Assert::AreEqual(0, logger_last_info);
+            Assert::AreEqual(0, logger_calls);
             order_free(nullptr);
         }
 
@@ -73,14 +90,17 @@ namespace orderstests
             Assert::AreEqual(0, std::strcmp("Hammer", head->name));
             Assert::AreEqual(0, std::strcmp("A-01", head->location));
             Assert::IsTrue(head->next == original_next);
-            Assert::AreEqual(1, logger_last_info);
+            Assert::AreEqual((int)ORDER_RECEIVE, (int)logger_last_type);
+            Assert::AreEqual(1, logger_last_approved);
+            Assert::AreEqual(std::string("Hammer"), logger_last_product);
             order_free(receive);
 
             Order* dispatch = order_create(1001U, 4, ORDER_DISPATCH);
             Assert::AreEqual(ORDER_SUCCESS, order_process(head, dispatch));
             Assert::AreEqual(11, head->quantity);
             Assert::AreEqual((int)ORDER_COMPLETED, (int)dispatch->status);
-            Assert::AreEqual(-1, logger_last_info);
+            Assert::AreEqual((int)ORDER_DISPATCH, (int)logger_last_type);
+            Assert::AreEqual(1, logger_last_approved);
             order_free(dispatch);
             inventory_free_all(&head);
             Assert::IsNull(head);
@@ -96,7 +116,7 @@ namespace orderstests
             Assert::AreEqual(ORDER_FAILURE, order_process(head, insufficient));
             Assert::AreEqual(5, head->quantity);
             Assert::AreEqual((int)ORDER_REJECTED, (int)insufficient->status);
-            Assert::AreEqual(0, logger_last_info);
+            Assert::AreEqual(0, logger_last_approved);
             order_free(insufficient);
 
             Order* missing = order_create(9999U, 1, ORDER_RECEIVE);
@@ -146,6 +166,13 @@ namespace orderstests
         TEST_METHOD(OR_I_001_SharedModuleIntegration)
         {
             Product* head = nullptr;
+            FILE* log_file = nullptr;
+            char log_text[2048] = { 0 };
+            size_t bytes_read;
+
+            order_set_logger(logger_write_transaction);
+            (void)std::remove(integration_log_path);
+            Assert::AreEqual(0, logger_initialize(integration_log_path, "orders_test"));
             Assert::AreEqual(0, inventory_add_product(&head, 77U, "  Bolts  ", 8, " B-02 "));
             Assert::AreEqual(0, std::strcmp("Bolts", head->name));
             Assert::AreEqual(0, std::strcmp("B-02", head->location));
@@ -154,10 +181,19 @@ namespace orderstests
             Assert::IsNotNull(order);
             Assert::AreEqual(ORDER_SUCCESS, order_process(head, order));
             Assert::AreEqual(6, inventory_get_product(head, 77U)->quantity);
-            Assert::AreEqual(1, logger_calls);
-            Assert::AreEqual(-1, logger_last_info);
             order_free(order);
             inventory_free_all(&head);
+            logger_shutdown();
+
+            Assert::AreEqual(0, fopen_s(&log_file, integration_log_path, "r"));
+            Assert::IsNotNull(log_file);
+            bytes_read = fread(log_text, 1U, sizeof(log_text) - 1U, log_file);
+            log_text[bytes_read] = '\0';
+            fclose(log_file);
+            Assert::IsTrue(std::strstr(log_text, "Product ID: 77") != nullptr);
+            Assert::IsTrue(std::strstr(log_text, "Product: Bolts") != nullptr);
+            Assert::IsTrue(std::strstr(log_text, "Type: Dispatch") != nullptr);
+            Assert::IsTrue(std::strstr(log_text, "Status: Approved") != nullptr);
         }
     };
 }
