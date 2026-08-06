@@ -1,3 +1,8 @@
+//--------------------------------------------------------------------------
+//		Configtests.cpp - Unit tests for the Config module of the WMS
+//						Author: Ivan Immanuel Shaji
+//--------------------------------------------------------------------------
+
 #include "pch.h"
 #include "CppUnitTest.h"
 
