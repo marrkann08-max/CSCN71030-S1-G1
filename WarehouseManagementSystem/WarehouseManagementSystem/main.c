@@ -6,9 +6,26 @@
 #include "main.h"
 #include "config.h"
 #include "utilities.h"
+#include <string.h>
 
 #include <stdio.h>
 #include <stdlib.h>
+
+/*
+ * Author: Ivan Immanuel Shaji
+ * Input: Characters remaining in standard input.
+ * Output: Removes characters through the next newline or end of file.
+ * Purpose: Recover safely after an overlength menu entry.
+ */
+static void discard_input_remainder(void)
+{
+	int character;
+
+	do
+	{
+		character = getchar();
+	} while (character != '\n' && character != EOF);
+}
 
 /*
  * Author: Ivan Immanuel Shaji
@@ -48,6 +65,7 @@ void display_menu(void)
 	printf("5. Alerts\n");
 	printf("0. Exit\n");
 	printf("Enter your selection: ");
+	fflush(stdout);
 }
 
 /*
@@ -77,4 +95,46 @@ int parse_menu_choice(char* input, MenuChoice* out_choice)
 
 	*out_choice = (MenuChoice)converted_choice;
 	return 0;
+}
+
+/*
+ * Author: Ivan Immanuel Shaji
+ * Input: A MenuChoice output pointer.
+ * Output: Reads and stores one validated selection, returning 0 or -1.
+ * Purpose: Read one menu selection safely from standard input.
+ */
+int read_menu_choice(MenuChoice* out_choice)
+{
+	char input[MENU_INPUT_CAPACITY];
+	size_t length;
+
+	if (util_check_null(out_choice) != 0)
+	{
+		return -1;
+	}
+
+	if (fgets(input, (int)sizeof(input), stdin) == NULL)
+	{
+		return -1;
+	}
+
+	length = strlen(input);
+
+	if (length > 0U && input[length - 1U] == '\n')
+	{
+		input[length - 1U] = '\0';
+		--length;
+	}
+	else if (!feof(stdin))
+	{
+		discard_input_remainder();
+		return -1;
+	}
+
+	if (length > 0U && input[length - 1U] == '\r')
+	{
+		input[length - 1U] = '\0';
+	}
+
+	return parse_menu_choice(input, out_choice);
 }
