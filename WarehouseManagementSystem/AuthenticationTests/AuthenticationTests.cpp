@@ -172,6 +172,36 @@ namespace AuthenticationTests
             Assert::AreEqual(
                 -1,
                 run_login_with_input(
+                    "",
+                    output,
+                    sizeof(output),
+                    errors,
+                    sizeof(errors),
+                    remaining,
+                    sizeof(remaining)
+                )
+            );
+            Assert::IsTrue(std::strcmp(output, "UNCHANGED") == 0);
+            Assert::IsTrue(errors[0] == '\0');
+
+            Assert::AreEqual(
+                -1,
+                run_login_with_input(
+                    "admin\n",
+                    output,
+                    sizeof(output),
+                    errors,
+                    sizeof(errors),
+                    remaining,
+                    sizeof(remaining)
+                )
+            );
+            Assert::IsTrue(std::strcmp(output, "UNCHANGED") == 0);
+            Assert::IsTrue(errors[0] == '\0');
+
+            Assert::AreEqual(
+                -1,
+                run_login_with_input(
                     "admin\nAdmin123\n",
                     small_output,
                     sizeof(small_output),

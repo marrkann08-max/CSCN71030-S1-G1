@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#define AUTH_READ_OK 0
+#define AUTH_READ_INVALID -1
+#define AUTH_READ_EOF -2
+
 static const char credentials[AUTH_MAX_USERS][2][AUTH_FIELD_SIZE] =
 {
     { "admin", "Admin123" },
@@ -62,7 +66,7 @@ static int read_field(
 
     if (fgets(buffer, (int)AUTH_FIELD_SIZE, stdin) == NULL)
     {
-        return -1;
+        return AUTH_READ_EOF;
     }
 
     length = strlen(buffer);
@@ -70,14 +74,14 @@ static int read_field(
     if (length > 0U && buffer[length - 1U] == '\n')
     {
         buffer[length - 1U] = '\0';
-        return 0;
+        return AUTH_READ_OK;
     }
 
     character = getchar();
 
     if (character == '\n' || character == EOF)
     {
-        return 0;
+        return AUTH_READ_OK;
     }
 
     do
@@ -87,7 +91,7 @@ static int read_field(
     while (character != '\n' && character != EOF);
 
     buffer[0] = '\0';
-    return -1;
+    return AUTH_READ_INVALID;
 }
 
 /*
@@ -141,6 +145,8 @@ int authentication_login(
     char password[AUTH_FIELD_SIZE];
     size_t attempt;
     size_t username_length;
+    int username_read_result;
+    int password_read_result;
 
     if (output_username == NULL || output_size == 0U)
     {
@@ -149,8 +155,30 @@ int authentication_login(
 
     for (attempt = 0U; attempt < AUTH_MAX_ATTEMPTS; ++attempt)
     {
-        if (read_field("Username: ", username) != 0 ||
-            read_field("Password: ", password) != 0)
+        username_read_result = read_field("Username: ", username);
+
+        if (username_read_result == AUTH_READ_EOF)
+        {
+            memset(password, 0, sizeof(password));
+            return -1;
+        }
+
+        if (username_read_result == AUTH_READ_INVALID)
+        {
+            memset(password, 0, sizeof(password));
+            fprintf(stderr, "Invalid username or password.\n");
+            continue;
+        }
+
+        password_read_result = read_field("Password: ", password);
+
+        if (password_read_result == AUTH_READ_EOF)
+        {
+            memset(password, 0, sizeof(password));
+            return -1;
+        }
+
+        if (password_read_result == AUTH_READ_INVALID)
         {
             memset(password, 0, sizeof(password));
             fprintf(stderr, "Invalid username or password.\n");
