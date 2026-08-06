@@ -5,6 +5,7 @@
 
 #include "main.h"
 #include "config.h"
+#include "utilities.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,4 +48,33 @@ void display_menu(void)
 	printf("5. Alerts\n");
 	printf("0. Exit\n");
 	printf("Enter your selection: ");
+}
+
+/*
+ * Author: Ivan Immanuel Shaji
+ * Input: Editable menu text and a MenuChoice output pointer.
+ * Output: Stores a validated choice and returns 0, otherwise returns -1.
+ * Purpose: Convert validated character input into a menu selection.
+ */
+int parse_menu_choice(char* input, MenuChoice* out_choice)
+{
+	int converted_choice;
+
+	if (util_check_null(input) != 0 || util_check_null(out_choice) != 0)
+	{
+		return -1;
+	}
+
+	if (util_validate_string(input, MENU_INPUT_CAPACITY - 1U) != 0)
+	{
+		return -1;
+	}
+
+	if (util_string_to_int(input, (int)MENU_EXIT, (int)MENU_ALERTS, &converted_choice) != 0)
+	{
+		return -1;
+	}
+
+	*out_choice = (MenuChoice)converted_choice;
+	return 0;
 }
