@@ -15,15 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="searchtests.cpp">
+    <ClCompile Include="Utilitiestests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\search.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\inventory.c"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="..\WarehouseManagementSystem\utilities.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WarehouseManagementSystem\utilities.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -31,8 +29,5 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\WarehouseManagementSystem\inventory.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="..\WarehouseManagementSystem\search.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="..\WarehouseManagementSystem\utilities.h"><Filter>Header Files</Filter></ClInclude>
   </ItemGroup>
 </Project>

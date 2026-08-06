@@ -153,6 +153,61 @@ namespace searchtests
 			Assert::AreEqual(0, count);
 		}
 
+		TEST_METHOD(test_empty_inventory_collections)
+		{
+			SearchResult result = { NULL, 99 };
+			Assert::AreEqual(0, search_all_products(NULL, &result));
+			Assert::AreEqual(0, result.count);
+			Assert::IsNull(result.products);
+
+			Assert::AreEqual(0, search_below_threshold(NULL, 10, &result));
+			Assert::AreEqual(0, result.count);
+			Assert::IsNull(result.products);
+		}
+
+		TEST_METHOD(test_invalid_search_inputs)
+		{
+			Product product = { 1001, "Hammer", 5, "A-01", NULL };
+			SearchResult result = { NULL, 0 };
+			Assert::AreEqual(-1, search_by_name(&product, "   ", &result));
+			Assert::AreEqual(-1, search_by_name(&product, NULL, &result));
+			Assert::AreEqual(-1, search_below_threshold(&product, -1, &result));
+			Assert::AreEqual(-1, search_by_quantity_range(&product, -1, 5, &result));
+			Assert::AreEqual(-1, search_by_quantity_range(&product, 6, 5, &result));
+			Assert::AreEqual(-1, search_all_products(&product, NULL));
+			search_free_results(NULL);
+		}
+
+		TEST_METHOD(test_history_validation)
+		{
+			SearchHistoryEntry entries[SEARCH_HISTORY_CAPACITY];
+			search_clear_history();
+			Assert::AreEqual(-1, search_record_history(NULL, 0));
+			Assert::AreEqual(-1, search_record_history("   ", 0));
+			Assert::AreEqual(-1, search_record_history("Hammer", -1));
+			Assert::AreEqual(-1, search_get_history(NULL));
+			Assert::AreEqual(0, search_record_history("  Hammer  ", 1));
+			Assert::AreEqual(1, search_get_history(entries));
+			Assert::AreEqual(std::string("Hammer"), std::string(entries[0].criteria));
+		}
+
+		TEST_METHOD(test_shared_inventory_integration)
+		{
+			Product* head = NULL;
+			SearchResult result = { NULL, 0 };
+			Assert::AreEqual(0, inventory_add_product(&head, 1001U, "Hammer", 5, "A-01"));
+			Assert::AreEqual(0, inventory_add_product(&head, 1002U, "Safety Gloves", 12, "A-02"));
+
+			Assert::IsTrue(search_by_id(head, 1002U) == inventory_get_product(head, 1002U));
+			Assert::AreEqual(0, search_by_name(head, "gloves", &result));
+			Assert::AreEqual(1, result.count);
+			Assert::AreEqual(1002U, result.products[0]->id);
+			Assert::AreEqual(12, result.products[0]->quantity);
+			search_free_results(&result);
+			inventory_free_all(&head);
+			Assert::IsNull(head);
+		}
+
 
 	};
 }
