@@ -1,24 +1,32 @@
 //--------------------------------------------------------------------------
-//		main.h - Header file for the Warehouse Management System
-//						Author: Ivan Immanuel Shaji
+// main.h - Main module interface for the Warehouse Management System
+//          Author: Ivan Immanuel Shaji
 //--------------------------------------------------------------------------
 
-#pragma once
+#ifndef MAIN_H
+#define MAIN_H
+
+#include "config.h"
+#include "inventory.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define MENU_INPUT_CAPACITY 64U
+#define MENU_INPUT_CAPACITY 128U
+#define MAIN_LOG_FILE_PATH "warehouse.log"
+#define MAIN_ALERT_FILE_PATH "low_stock.txt"
+#define MAIN_TEXT_REPORT_PATH "inventory_report.txt"
+#define MAIN_CSV_REPORT_PATH "inventory_report.csv"
 
 typedef enum MenuChoice
 {
-	MENU_EXIT = 0,
-	MENU_INVENTORY,
-	MENU_ORDERS,
-	MENU_SEARCH,
-	MENU_REPORTS,
-	MENU_ALERTS
+    MENU_EXIT = 0,
+    MENU_INVENTORY,
+    MENU_ORDERS,
+    MENU_SEARCH,
+    MENU_REPORTS,
+    MENU_ALERTS
 } MenuChoice;
 
 /*
@@ -45,6 +53,28 @@ int parse_menu_choice(char* input, MenuChoice* out_choice);
  */
 int read_menu_choice(MenuChoice* out_choice);
 
+/*
+ * Author: Ivan Immanuel Shaji
+ * Input: Selected menu value, shared Inventory pointer, and Config pointer.
+ * Output: Calls the selected module and returns its success or failure status.
+ * Purpose: Centralize switch-based dispatch and module status checking.
+ */
+int dispatch_menu_option(
+    int choice,
+    Product** head,
+    const Config* config
+);
+
+/*
+ * Author: Ivan Immanuel Shaji
+ * Input: Shared Inventory pointer and read-only Config pointer.
+ * Output: Runs until Exit/EOF and returns 0, or -1 for an input failure.
+ * Purpose: Control the validated interactive application menu loop.
+ */
+int run_menu(Product** head, const Config* config);
+
 #ifdef __cplusplus
 }
+#endif
+
 #endif
