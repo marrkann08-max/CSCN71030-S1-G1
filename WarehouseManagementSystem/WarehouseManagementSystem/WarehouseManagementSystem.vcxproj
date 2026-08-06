@@ -145,6 +145,7 @@
     <ClInclude Include="config.h" />
     <ClInclude Include="inventory.h" />
     <ClInclude Include="orders.h" />
+    <ClInclude Include="Report.h" />
     <ClInclude Include="search.h" />
     <ClInclude Include="utilities.h" />
   </ItemGroup>
@@ -155,6 +156,7 @@
     <ClCompile Include="config.c" />
     <ClCompile Include="inventory.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="Report.c" />
     <ClCompile Include="orders.c" />
     <ClCompile Include="search.c" />
     <ClCompile Include="utilities.c" />

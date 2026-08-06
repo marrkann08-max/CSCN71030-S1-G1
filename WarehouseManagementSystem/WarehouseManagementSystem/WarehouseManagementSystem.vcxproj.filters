@@ -12,6 +12,7 @@
     <ClCompile Include="inventory.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="main.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="orders.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="Report.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="search.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="utilities.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
@@ -22,6 +23,7 @@
     <ClInclude Include="config.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="inventory.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="orders.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="Report.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="search.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="utilities.h"><Filter>Header Files</Filter></ClInclude>
   </ItemGroup>

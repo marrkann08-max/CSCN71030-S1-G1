@@ -7,6 +7,7 @@
   <Project Path="AuthenticationTests/AuthenticationTests.vcxproj" />
   <Project Path="AlertsTests/AlertsTests.vcxproj" />
   <Project Path="InventoryTests/InventoryTests.vcxproj" />
+  <Project Path="ReportTest/ReportTest.vcxproj" />
   <Project Path="Configtests/Configtests.vcxproj" />
   <Project Path="orders_tests/orders_tests.vcxproj" />
   <Project Path="searchtests/searchtests.vcxproj" />
