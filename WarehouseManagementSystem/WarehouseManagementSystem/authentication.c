@@ -63,6 +63,7 @@ static int read_field(
     int character;
 
     fputs(prompt, stdout);
+    fflush(stdout);
 
     if (fgets(buffer, (int)AUTH_FIELD_SIZE, stdin) == NULL)
     {
@@ -148,7 +149,7 @@ int authentication_login(
     int username_read_result;
     int password_read_result;
 
-    if (output_username == NULL || output_size == 0U)
+    if (util_check_null(output_username) != 0 || output_size == 0U)
     {
         return -1;
     }

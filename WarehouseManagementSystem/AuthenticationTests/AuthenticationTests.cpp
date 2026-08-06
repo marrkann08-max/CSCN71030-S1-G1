@@ -1,3 +1,8 @@
+//--------------------------------------------------------------------------
+// AuthenticationTests.cpp - Functional tests for Authentication
+//                         Author: Navkirat Kaur
+//--------------------------------------------------------------------------
+
 #include "pch.h"
 #include "CppUnitTest.h"
 
@@ -14,6 +19,12 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace AuthenticationTests
 {
+    /*
+     * Author: Navkirat Kaur
+     * Input: Simulated login input and buffers for captured results.
+     * Output: Returns the login result and captures error and remaining input.
+     * Purpose: Run authentication_login with controlled standard streams.
+     */
     static int run_login_with_input(
         const char* input,
         char* output,
@@ -91,6 +102,12 @@ namespace AuthenticationTests
         return result;
     }
 
+    /*
+     * Author: Navkirat Kaur
+     * Input: Text to search and a nonempty expected substring.
+     * Output: Returns the number of non-overlapping substring occurrences.
+     * Purpose: Verify the number of Authentication error messages produced.
+     */
     static size_t count_occurrences(
         const char* text,
         const char* expected
@@ -112,6 +129,12 @@ namespace AuthenticationTests
     {
     public:
 
+        /*
+         * Author: Navkirat Kaur
+         * Input: Stored valid credentials with optional surrounding spaces.
+         * Output: Verifies successful case-sensitive authentication.
+         * Purpose: Test valid credential handling without modifying inputs.
+         */
         TEST_METHOD(AUT_F_001_ValidCredentials)
         {
             Assert::AreEqual(0, authenticate("admin", "Admin123"));
@@ -126,6 +149,12 @@ namespace AuthenticationTests
             Assert::IsTrue(std::strcmp(password, "  Admin123  ") == 0);
         }
 
+        /*
+         * Author: Navkirat Kaur
+         * Input: Unknown, incorrect, and incorrectly cased credentials.
+         * Output: Verifies that every invalid credential pair is rejected.
+         * Purpose: Test failed and case-sensitive credential comparisons.
+         */
         TEST_METHOD(AUT_F_002_InvalidAndCaseSensitiveCredentials)
         {
             Assert::AreEqual(-1, authenticate("unknown", "Admin123"));
@@ -134,6 +163,12 @@ namespace AuthenticationTests
             Assert::AreEqual(-1, authenticate("admin", "admin123"));
         }
 
+        /*
+         * Author: Navkirat Kaur
+         * Input: Null, empty, whitespace-only, and overlength credentials.
+         * Output: Verifies safe rejection of invalid credential inputs.
+         * Purpose: Test Authentication validation and boundary handling.
+         */
         TEST_METHOD(AUT_F_003_InvalidCredentialInputs)
         {
             char overlength[AUTH_FIELD_SIZE + 1U];
@@ -151,6 +186,12 @@ namespace AuthenticationTests
             Assert::AreEqual(-1, authenticate("admin", overlength));
         }
 
+        /*
+         * Author: Navkirat Kaur
+         * Input: Controlled successful, failed, exhausted, and bounded logins.
+         * Output: Verifies attempt limits, messages, output, and input handling.
+         * Purpose: Test the complete interactive login workflow.
+         */
         TEST_METHOD(AUT_F_004_LoginAttemptHandling)
         {
             char output[AUTH_FIELD_SIZE] = "UNCHANGED";
