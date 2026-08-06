@@ -177,11 +177,31 @@ void search_free_results(SearchResult* result) {
     result->count = 0;
 }
 int search_record_history(const char* criteria, int resultCount) {
+    int i;
+    if (criteria == NULL) {
+        return -1;
+    }
+    if (historyCount == SEARCH_HISTORY_CAPACITY) {
+        for (i = 1; i < SEARCH_HISTORY_CAPACITY; i++) {
+            history[i - 1] = history[i];
+        }
+        historyCount--;
+    }
+    strcpy_s(history[historyCount].criteria, SEARCH_TEXT_LENGTH, criteria);
+    history[historyCount].resultCount = resultCount;
+    historyCount++;
 	return 0;
 }
-int search_get_history(SearchHistoryEntry history[]) {
-	return 0;
+int search_get_history(SearchHistoryEntry entries[]) {
+    int i;
+    if (entries == NULL) {
+        return -1;
+    }
+    for (i = 0; i < historyCount; i++) {
+        entries[i] = history[i];
+    }
+    return historyCount;
 }
 void search_clear_history(void) {
-
+    historyCount = 0;
 }

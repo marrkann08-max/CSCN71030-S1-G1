@@ -29,6 +29,6 @@ int search_by_quantity_range(Product* head, int minimum, int maximum, SearchResu
 int search_all_products(Product* head, SearchResult* result);
 void search_free_results(SearchResult* result);
 int search_record_history(const char* criteria,int resultCount);
-int search_get_history(SearchHistoryEntry history[]);
+int search_get_history(SearchHistoryEntry entries[]);
 void search_clear_history(void);
 #endif
