@@ -30,12 +30,14 @@ static void discard_input_remainder(void)
 /*
  * Author: Ivan Immanuel Shaji
  * Input: Startup argument count and startup argument array.
- * Output: Returns EXIT_SUCCESS after successful startup, otherwise EXIT_FAILURE.
- * Purpose: Load the runtime configuration and start the warehouse system.
+ * Output: Returns EXIT_SUCCESS after a clean exit, otherwise EXIT_FAILURE.
+ * Purpose: Load configuration and control the Main menu loop.
  */
 int main(int argc, char* argv[])
 {
 	Config config;
+	MenuChoice choice;
+	int running = 1;
 
 	if (load_config(argc, argv, &config) != 0)
 	{
@@ -44,7 +46,61 @@ int main(int argc, char* argv[])
 	}
 
 	print_config(&config);
-	display_menu();
+
+	while (running)
+	{
+		display_menu();
+
+		if (read_menu_choice(&choice) != 0)
+		{
+			if (ferror(stdin))
+			{
+				fprintf(stderr, "Error: Unable to read menu input.\n");
+				return EXIT_FAILURE;
+			}
+
+			if (feof(stdin))
+			{
+				printf("\nInput ended. Exiting the system.\n");
+				break;
+			}
+
+			fprintf(stderr, "Invalid selection. Enter a number from 0 to 5.\n");
+			continue;
+		}
+
+		switch (choice)
+		{
+		case MENU_EXIT:
+			printf("Exiting the Warehouse Management System.\n");
+			running = 0;
+			break;
+
+		case MENU_INVENTORY:
+			printf("Inventory module is awaiting integration.\n");
+			break;
+
+		case MENU_ORDERS:
+			printf("Orders module is awaiting integration.\n");
+			break;
+
+		case MENU_SEARCH:
+			printf("Search module is awaiting integration.\n");
+			break;
+
+		case MENU_REPORTS:
+			printf("Reports module is awaiting integration.\n");
+			break;
+
+		case MENU_ALERTS:
+			printf("Alerts module is awaiting integration.\n");
+			break;
+
+		default:
+			fprintf(stderr, "Error: Unexpected menu selection.\n");
+			return EXIT_FAILURE;
+		}
+	}
 
 	return EXIT_SUCCESS;
 }
