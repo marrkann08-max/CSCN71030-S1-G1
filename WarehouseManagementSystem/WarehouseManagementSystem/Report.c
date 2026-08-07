@@ -1,3 +1,5 @@
+// This entire file has been heavly rewritten without Alex's consent rendering any documentation already made useless requiring it to be entierly rewritten.
+
 #include "Report.h"
 #include "utilities.h"
 
