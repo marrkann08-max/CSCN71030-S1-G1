@@ -1,4 +1,4 @@
-// This entire file has been heavly rewritten without Alex's consent rendering any documentation made useless requiring it to be entierly rewritten.
+// This entire file has been heavly rewritten without Alex's consent rendering any documentation already made useless requiring it to be entierly rewritten.
 
 #include "Logger.h"
 #include "utilities.h"
