@@ -96,7 +96,3 @@ The generated documentation will be available at:
 ```text
 docs/doxygen/html/index.html
 ```
-
-## Project status
-
-The project is fully integrated and ready for its final demonstration release.
