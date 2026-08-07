@@ -33,13 +33,3 @@ Demo accounts:
 ## Tests
 
 Open Test Explorer in Visual Studio and select **Run All**. The solution contains ten test projects and 60 automated tests.
-
-## Doxygen
-
-Run the following command from the repository root:
-
-```text
-doxygen Doxyfile
-```
-
-The generated HTML documentation will be placed in `docs/doxygen/html`. Zip that HTML folder for the final Doxygen submission.
