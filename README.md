@@ -1,6 +1,6 @@
 # Warehouse Management System
 
-This is a terminal-based warehouse management system made for CSCN71030 Group 1. It supports authentication, configuration, inventory, orders, searching, reports, low-stock alerts, and transaction logging.
+This is a terminal-based warehouse management system. It supports authentication, configuration, inventory, orders, searching, reports, low-stock alerts, and transaction logging.
 
 ## Team modules
 
